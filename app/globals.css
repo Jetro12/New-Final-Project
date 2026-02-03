@@ -1,6 +1,6 @@
-/* =========================
-   THEME VARIABLES
-========================= */
+/* =========================================================
+   01) THEME VARIABLES
+========================================================= */
 :root {
   /* Primary: Button Blue */
   --primary-100: #F2F7FF;
@@ -31,54 +31,36 @@
   --muted: rgba(250, 251, 252, 0.7);
 }
 
-/* =========================
-   BASE
-========================= */
-* {
-  box-sizing: border-box;
-}
+/* =========================================================
+   02) BASE / RESET
+========================================================= */
+* { box-sizing: border-box; }
 
-html,
-body {
-  height: 100%;
-}
+html, body { height: 100%; }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-  Roboto, Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   background-color: var(--bg);
   color: var(--text);
 }
 
-/* =========================
-   LAYOUT
-========================= */
+/* =========================================================
+   03) GLOBAL LAYOUT HELPERS
+========================================================= */
 .page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 32px 24px;
 }
 
-.section {
-  margin-top: 40px;
-}
+.section { margin-top: 40px; }
 
-.authCard{
-  background: #ffffff;
-  border-radius: 20px;
-  border: 1px solid rgba(0,0,0,0.08);
-  padding: 24px;
-  box-shadow: 0 18px 45px rgba(0,0,0,0.08);
-}
+.muted { color: var(--muted); }
 
-.muted {
-  color: var(--muted);
-}
-
-/* =========================
-   HEADER
-========================= */
+/* =========================================================
+   04) HEADER / NAV
+========================================================= */
 .header {
   position: sticky;
   top: 0;
@@ -100,14 +82,11 @@ body {
   color: var(--text);
 }
 
-.nav {
-  display: flex;
-  gap: 16px;
-}
+.nav { display: flex; gap: 16px; }
 
-/* =========================
-   BUTTONS & INPUTS
-========================= */
+/* =========================================================
+   05) BUTTONS & INPUTS (GLOBAL)
+========================================================= */
 .btn {
   padding: 10px 16px;
   border-radius: 14px;
@@ -119,21 +98,12 @@ body {
   text-decoration: none;
 }
 
-.btn:hover {
-  background-color: var(--primary-600);
-}
+.btn:hover { background-color: var(--primary-600); }
 
-.btn.accent {
-  background-color: var(--accent-500);
-}
+.btn.accent { background-color: var(--accent-500); }
+.btn.accent:hover { background-color: var(--accent-400); }
 
-.btn.accent:hover {
-  background-color: var(--accent-400);
-}
-
-.btn.ghost {
-  background-color: transparent;
-}
+.btn.ghost { background-color: transparent; }
 
 .input {
   width: 100%;
@@ -144,9 +114,78 @@ body {
   color: var(--text);
 }
 
-/* =========================
-   HERO (BIG)
-========================= */
+/* =========================================================
+   06) AUTH (SIGN IN PAGE)
+========================================================= */
+.authCard {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 24px;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+}
+
+/* ✅ Minimal fix so muted text shows on the white auth card.
+   (Remove if you don’t want this override) */
+.authCard .muted {
+  color: rgba(0,0,0,0.65);
+}
+
+.authButtons{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.authNote{
+  margin-top: 16px;
+  color: rgba(0,0,0,0.6);
+  font-weight: 600;
+}
+
+.authStatus{
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(7,22,28,0.06);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* ✅ Provider buttons (icons + spacing) — requested earlier */
+.authProviders {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0 8px;
+}
+
+.authProviderBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #ffffff;
+  color: #0d1a22;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.authProviderBtn:hover {
+  background: rgba(0,0,0,0.03);
+}
+
+.authIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================================
+   07) HERO (OLDER BIG HERO)
+========================================================= */
 .hero {
   position: relative;
   border-radius: 18px;
@@ -154,11 +193,7 @@ body {
   border: 1px solid var(--border);
 }
 
-.heroMedia {
-  width: 100%;
-  height: 520px;
-  border: none;
-}
+.heroMedia { width: 100%; height: 520px; border: none; }
 
 .heroOverlay {
   position: absolute;
@@ -169,32 +204,17 @@ body {
   flex-direction: column;
   justify-content: flex-end;
 
-  background: linear-gradient(
-          to top,
-          rgba(0, 0, 0, 0.75),
-          rgba(0, 0, 0, 0.2)
-  );
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.2));
 }
 
-.heroOverlay h1 {
-  font-size: 52px;
-  margin: 0;
-}
+.heroOverlay h1 { font-size: 52px; margin: 0; }
+.heroOverlay p { max-width: 700px; margin-top: 10px; }
 
-.heroOverlay p {
-  max-width: 700px;
-  margin-top: 10px;
-}
+.heroCtas { display: flex; gap: 12px; margin-top: 20px; }
 
-.heroCtas {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-/* =========================
-   CARDS & GRIDS
-========================= */
+/* =========================================================
+   08) CARDS & GRIDS (OLDER)
+========================================================= */
 .grid3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -214,18 +234,12 @@ body {
   object-fit: cover;
 }
 
-.cardBody {
-  padding: 14px;
-}
+.cardBody { padding: 14px; }
+.cardTitle { font-size: 18px; font-weight: 800; }
 
-.cardTitle {
-  font-size: 18px;
-  font-weight: 800;
-}
-
-/* =========================
-   FOOTER
-========================= */
+/* =========================================================
+   09) FOOTER
+========================================================= */
 .footer {
   margin-top: 60px;
   padding: 24px;
@@ -233,18 +247,15 @@ body {
   background-color: rgba(7, 22, 28, 0.9);
 }
 
-.siteFooterGrid{
+.siteFooterGrid {
   display:grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
 
-.siteFooterTitle{
-  font-weight: 900;
-  margin-bottom: 8px;
-}
+.siteFooterTitle { font-weight: 900; margin-bottom: 8px; }
 
-.pillRow{
+.pillRow {
   display:flex;
   gap: 10px;
   margin: 10px 0 16px;
@@ -260,26 +271,9 @@ body {
   font-size: 12px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 900px) {
-  .grid3 {
-    grid-template-columns: 1fr;
-  }
-
-  .heroMedia {
-    height: 420px;
-  }
-
-  .heroOverlay h1 {
-    font-size: 40px;
-  }
-}
-
-/* =========================
-   DESTINATIONS PAGE
-========================= */
+/* =========================================================
+   10) DESTINATIONS (LIST PAGE)
+========================================================= */
 .destPage{
   min-height: 100vh;
   background: #f4f6fb;
@@ -312,9 +306,7 @@ body {
   font-weight: 600;
 }
 
-.destSearch{
-  margin-top: 22px;
-}
+.destSearch{ margin-top: 22px; }
 
 .destCta{
   align-self: flex-start;
@@ -343,6 +335,7 @@ body {
   flex-direction: column;
   overflow: hidden;
 }
+
 .destCardImage{
   position: relative;
   border-radius: 16px;
@@ -368,17 +361,8 @@ body {
   font-size: 12px;
 }
 
-.destMedia{
-  position: relative;
-  height: 220px;
-}
-
-.destMedia img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display:block;
-}
+.destMedia{ position: relative; height: 220px; }
+.destMedia img{ width: 100%; height: 100%; object-fit: cover; display:block; }
 
 .destBadge{
   position: absolute;
@@ -406,15 +390,9 @@ body {
   gap: 12px;
 }
 
-.destName{
-  font-weight: 900;
-  font-size: 18px;
-}
+.destName{ font-weight: 900; font-size: 18px; }
 
-.destCountry{
-  opacity: 0.7;
-  font-weight: 700;
-}
+.destCountry{ opacity: 0.7; font-weight: 700; }
 
 .destPrice{
   font-weight: 900;
@@ -436,7 +414,6 @@ body {
   font-weight: 600;
 }
 
-
 .destTags{
   display:flex;
   gap: 8px;
@@ -451,6 +428,7 @@ body {
   font-weight: 800;
   font-size: 12px;
 }
+
 .destHighlights{
   border-top: 1px solid rgba(0,0,0,0.08);
   padding-top: 8px;
@@ -482,24 +460,13 @@ body {
   margin-bottom: 4px;
 }
 
-.destCopy{
-  margin: 0;
-  font-weight: 600;
-  opacity: 0.8;
-  line-height: 1.5;
-}
-
-.destMeta{
-  font-weight: 700;
-  opacity: 0.8;
-  font-size: 13px;
-}
+.destCopy{ margin: 0; font-weight: 600; opacity: 0.8; line-height: 1.5; }
+.destMeta{ font-weight: 700; opacity: 0.8; font-size: 13px; }
 
 .destActions{
   display:flex;
   gap: 10px;
   flex-wrap: wrap;
-
   margin-top: auto;
 }
 
@@ -517,12 +484,6 @@ body {
   background: rgba(0,0,0,0.02);
 }
 
-.destDetail .destGhost{
-  border-color: rgba(255,255,255,0.35);
-  color: white;
-  background: rgba(255,255,255,0.12);
-}
-
 .destBtn{
   display:inline-flex;
   justify-content:center;
@@ -536,9 +497,7 @@ body {
   color: white;
 }
 
-.destBtn:hover{
-  background: rgba(14,132,189,0.98);
-}
+.destBtn:hover{ background: rgba(14,132,189,0.98); }
 
 .destEmpty{
   margin-top: 18px;
@@ -548,95 +507,113 @@ body {
   font-weight: 700;
   opacity: 0.8;
 }
+
+/* =========================================================
+   11) DESTINATION DETAIL (FULL PAGE)
+========================================================= */
 .destDetail{
+  background: #f4f6fb;
+  color: #0d1a22;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
 .destDetailHero{
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-  gap: 24px;
-  align-items: center;
+  position: relative;
+  min-height: 360px;
+  background-size: cover;
+  background-position: center;
+  display:flex;
+  align-items:flex-end;
 }
 
-.destDetailHero img{
-  width: 100%;
-  border-radius: 18px;
-  object-fit: cover;
-  height: 320px;
+.destDetailOverlay{
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(7,22,28,0.15), rgba(7,22,28,0.75));
 }
 
-.destDetailOverline{
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 800;
-  color: rgba(0,0,0,0.6);
+.destDetailContent{
+  position:relative;
+  z-index:2;
+  padding: 48px 24px;
+  max-width: 1180px;
+  margin: 0 auto;
+  color: white;
 }
 
-.destDetailHighlights{
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 16px;
+.destDetailContent h1{
+  margin: 12px 0 6px;
+  font-size: 42px;
+  font-weight: 900;
 }
 
-.destDetailHighlights span{
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(78,234,122,0.2);
+.destDetailContent p{ margin: 0; opacity: 0.85; }
+
+.destBack{
+  display:inline-flex;
+  align-items:center;
+  gap: 6px;
+  color: white;
+  text-decoration: none;
   font-weight: 700;
+  opacity: 0.9;
 }
 
-.destDetailBody{
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  gap: 24px;
+.destDetailActions{
+  margin-top: 18px;
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.destDetailBody{ padding: 36px 0 64px; }
+
+.destDetailGrid{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display:grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 18px;
 }
 
 .destDetailCard{
   background: white;
-  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 18px;
-  padding: 20px;
-  display: flex;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.08);
+  padding: 22px;
+}
+
+.destDetailCard h2{ margin-top: 0; }
+
+.destDetailCard ul{
+  margin: 14px 0 0;
+  padding-left: 18px;
+}
+
+.destDetailPlan{
+  display:flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.08);
-}
-
-.destDetailPrice{
-  font-size: 24px;
-  font-weight: 900;
-}
-
-.destDetailMeta{
-  color: rgba(0,0,0,0.6);
-  font-weight: 600;
-}
-
-.authButtons{
-  display: flex;
-  flex-wrap: wrap;
   gap: 12px;
-  align-items: center;
+  margin: 12px 0 20px;
 }
 
-.authNote{
-  margin-top: 16px;
-  color: rgba(0,0,0,0.6);
-  font-weight: 600;
+.destDetailPlan span{
+  font-size: 12px;
+  opacity: 0.7;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-.authStatus{
-  margin-top: 20px;
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(7,22,28,0.06);
-  border: 1px solid rgba(0,0,0,0.08);
-}
+.destDetailPlan strong{ font-size: 16px; }
 
+/* =========================================================
+   12) BOOKING (NEW BOOKING LAYOUT)
+========================================================= */
 .bookingLayout{
   display: grid;
   grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
@@ -735,9 +712,7 @@ body {
   margin-top: 8px;
 }
 
-.summaryRow.total{
-  font-size: 18px;
-}
+.summaryRow.total{ font-size: 18px; }
 
 .bookingHighlights{
   background: rgba(7,22,28,0.05);
@@ -769,142 +744,10 @@ body {
   font-weight: 700;
 }
 
-
-@media (max-width: 980px){
-  .destGrid{ grid-template-columns: 1fr; }
-  .destHeader{ flex-direction: column; align-items: flex-start; }
-  .destDetailHero{
-    grid-template-columns: 1fr;
-  }
-  .destDetailBody{
-    grid-template-columns: 1fr;
-  }
-  .bookingLayout{
-    grid-template-columns: 1fr;
-  }
-  .bookingGrid{
-    grid-template-columns: 1fr;
-  }
-
-
-}
-
-/* =========================
-   DESTINATION DETAIL
-========================= */
-.destDetail{
-  background: #f4f6fb;
-  color: #0d1a22;
-  min-height: 100vh;
-}
-
-.destDetailHero{
-  position: relative;
-  min-height: 360px;
-  background-size: cover;
-  background-position: center;
-  display:flex;
-  align-items:flex-end;
-}
-
-.destDetailOverlay{
-  position:absolute;
-  inset:0;
-  background: linear-gradient(180deg, rgba(7,22,28,0.15), rgba(7,22,28,0.75));
-}
-
-.destDetailContent{
-  position:relative;
-  z-index:2;
-  padding: 48px 24px;
-  max-width: 1180px;
-  margin: 0 auto;
-  color: white;
-}
-
-.destDetailContent h1{
-  margin: 12px 0 6px;
-  font-size: 42px;
-  font-weight: 900;
-}
-
-.destDetailContent p{
-  margin: 0;
-  opacity: 0.85;
-}
-
-.destBack{
-  display:inline-flex;
-  align-items:center;
-  gap: 6px;
-  color: white;
-  text-decoration: none;
-  font-weight: 700;
-  opacity: 0.9;
-}
-
-.destDetailActions{
-  margin-top: 18px;
-  display:flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.destDetailBody{
-  padding: 36px 0 64px;
-}
-
-.destDetailGrid{
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display:grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 18px;
-}
-
-.destDetailCard{
-  background: white;
-  border-radius: 18px;
-  border: 1px solid rgba(0,0,0,0.06);
-  box-shadow: 0 18px 55px rgba(0,0,0,0.08);
-  padding: 22px;
-}
-
-.destDetailCard h2{
-  margin-top: 0;
-}
-
-.destDetailCard ul{
-  margin: 14px 0 0;
-  padding-left: 18px;
-}
-
-.destDetailPlan{
-  display:flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 12px 0 20px;
-}
-
-.destDetailPlan span{
-  font-size: 12px;
-  opacity: 0.7;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.destDetailPlan strong{
-  font-size: 16px;
-}
-
-@media (max-width: 980px){
-  .destDetailGrid{ grid-template-columns: 1fr; }
-}
-
-/* =========================
-   BOOKING
-========================= */
+/* =========================================================
+   13) BOOKING (OLDER BOOKING PAGE STYLES)
+   NOTE: you have a second booking system below; kept intact.
+========================================================= */
 .bookingPage{
   background: #f4f6fb;
   color: #0d1a22;
@@ -925,9 +768,7 @@ body {
   align-items: flex-start;
 }
 
-.bookingHeader h1{
-  margin: 0 0 6px;
-}
+.bookingHeader h1{ margin: 0 0 6px; }
 
 .bookingHeader p{
   margin: 0;
@@ -1010,9 +851,7 @@ body {
   gap: 12px;
 }
 
-.bookingMeta h3{
-  margin: 0;
-}
+.bookingMeta h3{ margin: 0; }
 
 .bookingLine{
   display:flex;
@@ -1020,22 +859,11 @@ body {
   font-weight: 700;
 }
 
-@media (max-width: 980px){
-  .bookingGrid{ grid-template-columns: 1fr; }
-  .bookingHeader{ flex-direction: column; }
-}
+/* =========================================================
+   14) HOME HERO WRAPPER / ROAMER HERO SYSTEM
+========================================================= */
+.homeHeroSection{ background: #44a79d; padding: 0; }
 
-/* =========================
-   HOME HERO WRAPPER
-========================= */
-.homeHeroSection{
-  background: #44a79d;
-  padding: 0;
-}
-
-/* =========================
-   HERO card + topbar
-========================= */
 .roamerHeroStage{
   width: 100vw;
   margin: 0;
@@ -1100,9 +928,7 @@ body {
   letter-spacing: 0.2px;
 }
 
-.roamerNavLink:hover{
-  color: rgba(255,255,255,1);
-}
+.roamerNavLink:hover{ color: rgba(255,255,255,1); }
 
 .roamerNavRight{
   display:flex;
@@ -1125,9 +951,9 @@ body {
 
 .roamerLink:hover{ color: rgba(255,255,255,0.95); }
 
-/* =========================
-   HERO main area
-========================= */
+/* =========================================================
+   15) HERO MAIN AREA (ROAMER)
+========================================================= */
 .roamerMain{
   position:relative;
   height: 560px;
@@ -1204,13 +1030,9 @@ body {
 
 .roamerBtn:hover{ background: rgba(14,132,189,0.95); }
 
-.roamerBtn.ghost{
-  background: rgba(255,255,255,0.10);
-}
+.roamerBtn.ghost{ background: rgba(255,255,255,0.10); }
 
-.roamerBtn.ghost:hover{
-  background: rgba(255,255,255,0.16);
-}
+.roamerBtn.ghost:hover{ background: rgba(255,255,255,0.16); }
 
 .roamerDots{
   margin-top: 18px;
@@ -1282,9 +1104,9 @@ body {
 .roamerThumb.t2{ transform: translateX(10px) translateY(0px);  z-index: 2; opacity: 0.85; }
 .roamerThumb.t3{ transform: translateX(90px) translateY(30px); z-index: 3; opacity: 1; }
 
-/* =========================
-   Search panel under hero
-========================= */
+/* =========================================================
+   16) SEARCH PANEL (UNDER HERO)
+========================================================= */
 .searchWrap{
   width: 100%;
   margin: 0;
@@ -1301,7 +1123,6 @@ body {
   justify-content: flex-start;
 }
 
-
 .searchCard{
   width: min(1050px, 100%);
   background: rgba(255,255,255,0.92);
@@ -1316,7 +1137,6 @@ body {
   width: 100%;
   box-shadow: 0 12px 32px rgba(0,0,0,0.12);
 }
-
 
 .searchTabs{
   display: inline-flex;
@@ -1385,22 +1205,17 @@ body {
   color: rgba(0,0,0,0.85);
 }
 
-.searchBtn:hover{
-  filter: brightness(0.97);
-}
+.searchBtn:hover{ filter: brightness(0.97); }
 
 .searchBtn:disabled{
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-/* =========================
-   Scroll sections
-========================= */
-.homePage{
-  width: 100%;
-  background: #07161c;
-}
+/* =========================================================
+   17) SCROLL SECTIONS / HOME PAGE SECTIONS
+========================================================= */
+.homePage{ width: 100%; background: #07161c; }
 
 .wrap{
   max-width: 1180px;
@@ -1408,29 +1223,12 @@ body {
   padding: 0 24px;
 }
 
-.sectionWrap{
-  padding: 72px 0;
-}
+.sectionWrap{ padding: 72px 0; }
 
-.sectionLight{
-  background: #f4f6fb;
-  color: #0d1a22;
-}
-
-.sectionSoft{
-  background: #eef2f8;
-  color: #0d1a22;
-}
-
-.sectionDark{
-  background: #08131a;
-  color: #f6f9ff;
-}
-
-.sectionContact{
-  background: #061217;
-  color: #ffffff;
-}
+.sectionLight{ background: #f4f6fb; color: #0d1a22; }
+.sectionSoft{ background: #eef2f8; color: #0d1a22; }
+.sectionDark{ background: #08131a; color: #f6f9ff; }
+.sectionContact{ background: #061217; color: #ffffff; }
 
 .sectionHead{
   max-width: 760px;
@@ -1438,10 +1236,7 @@ body {
   text-align: center;
 }
 
-.sectionHead.left{
-  text-align: left;
-  margin: 0 0 18px;
-}
+.sectionHead.left{ text-align: left; margin: 0 0 18px; }
 
 .sectionHead h2{
   margin: 0;
@@ -1455,9 +1250,7 @@ body {
   line-height: 1.5;
 }
 
-.sectionWrap.sectionLight{
-  padding-top: 110px;
-}
+.sectionWrap.sectionLight{ padding-top: 110px; }
 
 .cardGrid{
   display: grid;
@@ -1495,20 +1288,11 @@ body {
   gap: 8px;
 }
 
-.infoCardTitle{
-  font-weight: 900;
-  font-size: 16px;
-}
+.infoCardTitle{ font-weight: 900; font-size: 16px; }
 
-.infoCardMeta{
-  opacity: 0.7;
-  font-size: 13px;
-}
+.infoCardMeta{ opacity: 0.7; font-size: 13px; }
 
-.infoCardPrice{
-  font-weight: 900;
-  font-size: 18px;
-}
+.infoCardPrice{ font-weight: 900; font-size: 18px; }
 
 .btnPrimary{
   display:inline-flex;
@@ -1543,9 +1327,7 @@ body {
   width: fit-content;
 }
 
-.sectionDark .btnGhost{
-  border-color: rgba(255,255,255,0.18);
-}
+.sectionDark .btnGhost{ border-color: rgba(255,255,255,0.18); }
 
 .centerActions{
   margin-top: 22px;
@@ -1621,6 +1403,9 @@ body {
 .testimonialText{ margin-top: 6px; opacity: 0.75; line-height: 1.5; }
 .testimonialMeta{ margin-top: 8px; opacity: 0.65; font-size: 12px; }
 
+/* =========================================================
+   18) FOOTER (HOME PAGE SECTIONS)
+========================================================= */
 .footerWrap{
   display:flex;
   flex-direction: column;
@@ -1640,10 +1425,7 @@ body {
   font-weight: 900;
 }
 
-.footerInfo p{
-  margin: 10px 0 0;
-  opacity: 0.75;
-}
+.footerInfo p{ margin: 10px 0 0; opacity: 0.75; }
 
 .footerMeta{
   margin-top: 16px;
@@ -1670,9 +1452,7 @@ body {
   outline: none;
 }
 
-.footerField::placeholder{
-  color: rgba(255,255,255,0.65);
-}
+.footerField::placeholder{ color: rgba(255,255,255,0.65); }
 
 .footerField:focus{
   border-color: rgba(78,234,122,0.8);
@@ -1689,9 +1469,7 @@ body {
   color: rgba(0,0,0,0.85);
 }
 
-.footerBtn:hover{
-  filter: brightness(0.97);
-}
+.footerBtn:hover{ filter: brightness(0.97); }
 
 .footerBottom{
   text-align:center;
@@ -1699,6 +1477,9 @@ body {
   padding-bottom: 10px;
 }
 
+/* =========================================================
+   19) CONTACT
+========================================================= */
 .contactSplit{ grid-template-columns: 1fr 1fr; }
 .contactTitle{ margin: 0; font-size: 30px; font-weight: 900; }
 .contactSub{ margin-top: 10px; opacity: 0.75; }
@@ -1747,6 +1528,9 @@ body {
   padding-bottom: 18px;
 }
 
+/* =========================================================
+   20) INTERACTIONS / FOCUS
+========================================================= */
 .infoCard,
 .miniCard,
 .testimonialCard,
@@ -1769,6 +1553,23 @@ body {
   outline-offset: 2px;
 }
 
+/* =========================================================
+   21) RESPONSIVE
+========================================================= */
+@media (max-width: 900px) {
+  .grid3 { grid-template-columns: 1fr; }
+  .heroMedia { height: 420px; }
+  .heroOverlay h1 { font-size: 40px; }
+}
+
+@media (max-width: 980px){
+  .destGrid{ grid-template-columns: 1fr; }
+  .destHeader{ flex-direction: column; align-items: flex-start; }
+  .destDetailGrid{ grid-template-columns: 1fr; }
+  .bookingLayout{ grid-template-columns: 1fr; }
+  .bookingGrid{ grid-template-columns: 1fr; }
+}
+
 @media (max-width: 980px){
   .cardGrid{ grid-template-columns: 1fr; }
   .split{ grid-template-columns: 1fr; }
@@ -1782,9 +1583,348 @@ body {
   .searchWrap{ margin-top: 14px; }
 }
 
+@media (max-width: 980px){
+  .destDetailGrid{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 980px){
+  .bookingGrid{ grid-template-columns: 1fr; }
+  .bookingHeader{ flex-direction: column; }
+}
+
 @media (max-width: 920px){
   .roamerMain{ height: 520px; padding: 16px; }
   .roamerLeft{ width: 100%; }
   .roamerRight{ display:none; }
   .roamerTitle{ font-size: 48px; }
+}
+/* =========================
+   AUTH SPLIT PAGE (Roamer)
+   Inspired by the layout you sent
+========================= */
+
+.authSplitPage{
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 36px 16px;
+}
+
+.authSplitShell{
+  width: min(1200px, 100%);
+  display:grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  border-radius: 26px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 26px 70px rgba(0,0,0,0.35);
+  background: rgba(255,255,255,0.02);
+}
+
+.authLeft{
+  background: #ffffff;
+  color: #0d1a22;
+  padding: 28px;
+}
+
+.authBrandRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom: 12px;
+}
+
+.authBrand{
+  text-decoration:none;
+  font-weight: 900;
+  font-size: 18px;
+  color: #0d1a22;
+  letter-spacing: 0.2px;
+}
+
+.authClose{
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color: rgba(0,0,0,0.7);
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(0,0,0,0.02);
+  font-weight: 900;
+}
+
+.authClose:hover{ background: rgba(0,0,0,0.05); }
+
+.authTitle{
+  margin: 10px 0 6px;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.authSubtitle{
+  margin: 0;
+  max-width: 640px;
+  color: rgba(0,0,0,0.65);
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+/* icon row like the reference */
+.authSocialRow{
+  margin-top: 16px;
+  display:flex;
+  gap: 12px;
+  align-items:center;
+}
+
+.authIconBtn{
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #ffffff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor: pointer;
+}
+
+.authIconBtn:hover{ background: rgba(0,0,0,0.03); }
+
+.authOrRow{
+  margin: 18px 0 14px;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+.authOrRow span{
+  height: 1px;
+  background: rgba(0,0,0,0.10);
+  flex: 1;
+}
+
+.authOrRow small{
+  font-weight: 900;
+  color: rgba(0,0,0,0.45);
+  letter-spacing: 0.14em;
+}
+
+.authProvidersStack{
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.authProviderBtnWide{
+  height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: rgba(255,255,255,0.96);
+  font-weight: 900;
+  color: #0d1a22;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+  padding: 0 16px;
+}
+
+.authProviderBtnWide:hover{
+  background: rgba(0,0,0,0.03);
+}
+
+.authIconInline{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.authMiniInfo{
+  margin-top: 18px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.authMiniInfo h4{
+  margin: 0;
+  font-weight: 900;
+}
+
+.authMiniInfo ul{
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: rgba(0,0,0,0.70);
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.authMiniInfo p{
+  margin: 10px 0 0;
+  color: rgba(0,0,0,0.65);
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.authHintBox,
+.authStatusBox{
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(7,22,28,0.05);
+  border: 1px solid rgba(0,0,0,0.08);
+  font-weight: 650;
+}
+
+.authStatusTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.authLinkBtn{
+  border: 0;
+  background: transparent;
+  color: var(--primary-700);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.authStatusActions{
+  margin-top: 12px;
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.authPrimaryCta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: rgba(43,164,240,0.95);
+  color: white;
+  font-weight: 900;
+  text-decoration:none;
+}
+
+.authPrimaryCta:hover{ background: rgba(14,132,189,0.98); }
+
+.authGhostCta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.12);
+  color: #0d1a22;
+  font-weight: 900;
+  text-decoration:none;
+  background: rgba(0,0,0,0.02);
+}
+
+.authGhostCta:hover{ background: rgba(0,0,0,0.05); }
+
+/* Right panel uses your palette (teal/sea) */
+.authRight{
+  background: linear-gradient(135deg, rgba(43,164,240,0.35), rgba(0,70,89,0.92));
+  color: #ffffff;
+  padding: 28px;
+  position: relative;
+}
+
+.authRight::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+          radial-gradient(circle at 75% 70%, rgba(255,255,255,0.12), transparent 50%),
+          radial-gradient(circle at 40% 30%, rgba(255,255,255,0.10), transparent 55%);
+  pointer-events:none;
+}
+
+.authRightInner{
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.authRightInner h2{
+  margin: 0;
+  font-size: 44px;
+  font-weight: 900;
+}
+
+.authRightInner p{
+  margin: 0;
+  max-width: 340px;
+  opacity: 0.9;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+.authRightCta{
+  margin-top: 10px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height: 48px;
+  width: fit-content;
+  min-width: 220px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.96);
+  color: rgba(0,0,0,0.85);
+  text-decoration:none;
+  font-weight: 900;
+}
+
+.authRightCta:hover{
+  filter: brightness(0.98);
+}
+
+.authRightFoot{
+  margin-top: 14px;
+  display:flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  opacity: 0.92;
+  font-weight: 650;
+}
+
+.authRightFoot a{
+  color: #ffffff;
+  font-weight: 900;
+}
+
+/* Mobile */
+@media (max-width: 980px){
+  .authSplitShell{
+    grid-template-columns: 1fr;
+  }
+  .authRight{
+    min-height: 220px;
+  }
+  .authTitle{
+    font-size: 40px;
+  }
+  .authMiniInfo{
+    grid-template-columns: 1fr;
+  }
 }

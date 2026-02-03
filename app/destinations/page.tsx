@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
 import { DESTINATIONS } from "./data";
+import RequireAuth from "@/components/RequireAuth";
+
 
 export default function DestinationsPage() {
     const q = useSearchParams();
@@ -119,4 +121,13 @@ export default function DestinationsPage() {
             </div>
         </div>
     );
+
+    return (
+        <RequireAuth>
+            <div className="destPage">
+                ...
+            </div>
+        </RequireAuth>
+    );
+
 }

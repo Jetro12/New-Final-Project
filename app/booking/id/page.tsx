@@ -2,13 +2,12 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useSession, signIn, signOut } from "next-auth/react";
+import RequireAuth from "@/components/RequireAuth";
 import { getDestinationById } from "@/app/destinations/data";
-import { AuthProvider, clearAuthProvider, getStoredAuthProvider, storeAuthProvider } from "@/lib/auth";
 
 type Props = {
-    params: {
-        id: string;
-    };
+    params: { id: string };
 };
 
 type BookingForm = {
@@ -27,9 +26,12 @@ type FormErrors = Partial<Record<keyof BookingForm, string>>;
 
 export default function BookingPage({ params }: Props) {
     const destination = getDestinationById(params.id);
-    const [provider, setProvider] = useState<AuthProvider | null>(() => getStoredAuthProvider());
+    const { data: session, status } = useSession();
+    const user = session?.user;
+
     const [errors, setErrors] = useState<FormErrors>({});
     const [submitted, setSubmitted] = useState(false);
+
     const [form, setForm] = useState<BookingForm>({
         start: "",
         end: "",
@@ -60,17 +62,6 @@ export default function BookingPage({ params }: Props) {
                 </section>
             </div>
         );
-    }
-
-    function handleAuth(providerChoice: AuthProvider) {
-        storeAuthProvider(providerChoice);
-        setProvider(providerChoice);
-    }
-
-    function handleSignOut() {
-        clearAuthProvider();
-        setProvider(null);
-        setSubmitted(false);
     }
 
     function updateField<K extends keyof BookingForm>(key: K, value: BookingForm[K]) {
@@ -104,44 +95,108 @@ export default function BookingPage({ params }: Props) {
         setSubmitted(true);
     }
 
-    return (
-        <div className="page">
-            <section className="section bookingLayout">
-                <div className="bookingMain">
-                    <div className="bookingHeader">
-                        <p className="bookingOverline">Booking</p>
-                        <h2>
-                            {destination.name}, {destination.country}
-                        </h2>
-                        <p className="muted">{destination.description}</p>
-                    </div>
+    // ✅ Must be signed in to book
+    if (status === "loading") {
+        return <div className="page">Loading…</div>;
+    }
 
-                    {!provider ? (
+    if (status !== "authenticated") {
+        return (
+            <div className="page">
+                <section className="section bookingLayout">
+                    <div className="bookingMain">
+                        <div className="bookingHeader">
+                            <p className="bookingOverline">Booking</p>
+                            <h2>
+                                {destination.name}, {destination.country}
+                            </h2>
+                            <p className="muted">{destination.description}</p>
+                        </div>
+
                         <div className="bookingAuth">
                             <h3>Sign in to continue</h3>
                             <p className="muted">
-                                Booking is available after secure sign-in. Choose Google or
-                                Microsoft to continue.
+                                Booking is available after secure sign-in. Choose Google or Microsoft to continue.
                             </p>
+
                             <div className="authButtons">
-                                <button className="btn" type="button" onClick={() => handleAuth("google")}>
+                                <button
+                                    className="btn"
+                                    type="button"
+                                    onClick={() => signIn("google", { callbackUrl: `/booking/${destination.id}` })}
+                                >
                                     Continue with Google
                                 </button>
-                                <button className="btn ghost" type="button" onClick={() => handleAuth("microsoft")}>
+
+                                <button
+                                    className="btn ghost"
+                                    type="button"
+                                    onClick={() => signIn("azure-ad", { callbackUrl: `/booking/${destination.id}` })}
+                                >
                                     Continue with Microsoft
                                 </button>
                             </div>
+
                             <p className="authNote">
                                 We only support Google or Microsoft sign-in for account security.
                             </p>
+
+                            <div style={{ marginTop: 12 }}>
+                                <Link className="btn ghost" href="/destinations">
+                                    Back to destinations
+                                </Link>
+                            </div>
                         </div>
-                    ) : (
+                    </div>
+
+                    <aside className="bookingAside">
+                        <div className="bookingSummary">
+                            <img src={destination.image} alt={`${destination.name} view`} />
+                            <div>
+                                <h3>Trip summary</h3>
+                                <p>{destination.bestFor}</p>
+                                <div className="summaryRow">
+                                    <span>Base price</span>
+                                    <strong>£{destination.fromPrice}</strong>
+                                </div>
+                                <div className="summaryRow">
+                                    <span>Travellers</span>
+                                    <strong>{form.travellers}</strong>
+                                </div>
+                                <div className="summaryRow total">
+                                    <span>Estimated total</span>
+                                    <strong>£{estimatedTotal}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </section>
+            </div>
+        );
+    }
+
+    // ✅ Signed in → show form
+    return (
+        <RequireAuth>
+            <div className="page">
+                <section className="section bookingLayout">
+                    <div className="bookingMain">
+                        <div className="bookingHeader">
+                            <p className="bookingOverline">Booking</p>
+                            <h2>
+                                {destination.name}, {destination.country}
+                            </h2>
+                            <p className="muted">{destination.description}</p>
+                        </div>
+
                         <div className="bookingFormCard">
                             <div className="bookingSignedIn">
-                                Signed in with{" "}
-                                <strong>{provider === "google" ? "Google" : "Microsoft"}</strong>
-                                .
-                                <button className="linkBtn" type="button" onClick={handleSignOut}>
+                                Signed in as <strong>{user?.name ?? "Traveller"}</strong> · {user?.email ?? ""}
+                                <button
+                                    className="linkBtn"
+                                    type="button"
+                                    onClick={() => signOut({ callbackUrl: `/booking/${destination.id}` })}
+                                >
                                     Sign out
                                 </button>
                             </div>
@@ -150,8 +205,8 @@ export default function BookingPage({ params }: Props) {
                                 <div className="bookingSuccess">
                                     <h3>Booking request received ✅</h3>
                                     <p className="muted">
-                                        We sent a confirmation email to {form.email}. Our team will
-                                        follow up with curated options and next steps.
+                                        We sent a confirmation email to {form.email}. Our team will follow up with curated
+                                        options and next steps.
                                     </p>
                                     <div className="bookingActions">
                                         <Link className="btn" href="/destinations">
@@ -238,9 +293,7 @@ export default function BookingPage({ params }: Props) {
                                                 value={form.fullName}
                                                 onChange={(e) => updateField("fullName", e.target.value)}
                                             />
-                                            {errors.fullName && (
-                                                <small className="err">{errors.fullName}</small>
-                                            )}
+                                            {errors.fullName && <small className="err">{errors.fullName}</small>}
                                         </label>
 
                                         <label>
@@ -282,41 +335,41 @@ export default function BookingPage({ params }: Props) {
                                 </form>
                             )}
                         </div>
-                    )}
-                </div>
+                    </div>
 
-                <aside className="bookingAside">
-                    <div className="bookingSummary">
-                        <img src={destination.image} alt={`${destination.name} view`} />
-                        <div>
-                            <h3>Trip summary</h3>
-                            <p>{destination.bestFor}</p>
-                            <div className="summaryRow">
-                                <span>Base price</span>
-                                <strong>£{destination.fromPrice}</strong>
-                            </div>
-                            <div className="summaryRow">
-                                <span>Travellers</span>
-                                <strong>{form.travellers}</strong>
-                            </div>
-                            <div className="summaryRow total">
-                                <span>Estimated total</span>
-                                <strong>£{estimatedTotal}</strong>
+                    <aside className="bookingAside">
+                        <div className="bookingSummary">
+                            <img src={destination.image} alt={`${destination.name} view`} />
+                            <div>
+                                <h3>Trip summary</h3>
+                                <p>{destination.bestFor}</p>
+                                <div className="summaryRow">
+                                    <span>Base price</span>
+                                    <strong>£{destination.fromPrice}</strong>
+                                </div>
+                                <div className="summaryRow">
+                                    <span>Travellers</span>
+                                    <strong>{form.travellers}</strong>
+                                </div>
+                                <div className="summaryRow total">
+                                    <span>Estimated total</span>
+                                    <strong>£{estimatedTotal}</strong>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="bookingHighlights">
-                        <h4>What’s included</h4>
-                        <ul>
-                            <li>Flexible hotel options and verified reviews</li>
-                            <li>24/7 travel support once booked</li>
-                            <li>Optional add-ons for tours and transfers</li>
-                            <li>Secure payments with deposits available</li>
-                        </ul>
-                    </div>
-                </aside>
-            </section>
-        </div>
+                        <div className="bookingHighlights">
+                            <h4>What’s included</h4>
+                            <ul>
+                                <li>Flexible hotel options and verified reviews</li>
+                                <li>24/7 travel support once booked</li>
+                                <li>Optional add-ons for tours and transfers</li>
+                                <li>Secure payments with deposits available</li>
+                            </ul>
+                        </div>
+                    </aside>
+                </section>
+            </div>
+        </RequireAuth>
     );
 }
