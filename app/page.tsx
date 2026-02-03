@@ -1,8 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import HeroCarousel from "@/components/HeroCarousel";
 import SearchBar from "@/components/SearchBar";
 
-const packages = [
+type PackageCard = {
+    id: string;
+    title: string;
+    nights: string;
+    price: string;
+    image: string;
+};
+
+type ArticleCard = {
+    id: string;
+    title: string;
+    date: string;
+    image: string;
+};
+
+const packages: PackageCard[] = [
     {
         id: "dubai",
         title: "Dubai & Abu Dhabi",
@@ -29,7 +46,7 @@ const packages = [
     },
 ];
 
-const articles = [
+const articles: ArticleCard[] = [
     {
         id: "uae-ramadan",
         title: "Travelling during Ramadan in the UAE",
@@ -54,6 +71,11 @@ const articles = [
 ];
 
 export default function HomePage() {
+    function submitContact(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        alert("Message sent ✅ (UI only for now)");
+    }
+
     return (
         <div className="homePage">
             <section className="homeHeroSection">
@@ -61,7 +83,6 @@ export default function HomePage() {
                 <SearchBar />
             </section>
 
-            {/* PACKAGES */}
             <section className="sectionWrap sectionLight sectionAfterHero">
                 <div className="wrap">
                     <div className="sectionHead">
@@ -72,7 +93,12 @@ export default function HomePage() {
                     <div className="cardGrid">
                         {packages.map((p) => (
                             <div className="infoCard" key={p.id}>
-                                <img className="infoCardImg" src={p.image} alt={p.title} />
+                                <img
+                                    className="infoCardImg"
+                                    src={p.image}
+                                    alt={`View of ${p.title}`}
+                                    loading="lazy"
+                                />
                                 <div className="infoCardBody">
                                     <div className="infoCardTitle">{p.title}</div>
                                     <div className="infoCardMeta">{p.nights}</div>
@@ -93,7 +119,6 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* EVENTS + ABOUT */}
             <section className="sectionWrap sectionSoft">
                 <div className="wrap">
                     <div className="split">
@@ -107,7 +132,8 @@ export default function HomePage() {
                                 <div className="miniCard">
                                     <img
                                         src="https://images.pexels.com/photos/358229/pexels-photo-358229.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                                        alt="event"
+                                        alt="Audience at an outdoor event"
+                                        loading="lazy"
                                     />
                                     <div className="miniCardBody">
                                         <div className="miniCardTitle">Beyond the Skyline</div>
@@ -118,7 +144,8 @@ export default function HomePage() {
                                 <div className="miniCard">
                                     <img
                                         src="https://images.pexels.com/photos/2044434/pexels-photo-2044434.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                                        alt="event"
+                                        alt="Dubai skyline at dusk"
+                                        loading="lazy"
                                     />
                                     <div className="miniCardBody">
                                         <div className="miniCardTitle">FutureX: Innovation</div>
@@ -131,8 +158,8 @@ export default function HomePage() {
                         <div className="aboutBox">
                             <h3>About Roamer</h3>
                             <p>
-                                Roamer makes trip planning simple: discover destinations, compare
-                                options, and book in a few clicks.
+                                Roamer makes trip planning simple: discover destinations, compare options,
+                                and book in a few clicks.
                             </p>
                             <Link className="btnPrimary" href="/destinations">
                                 Start exploring
@@ -142,7 +169,6 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* ARTICLES */}
             <section className="sectionWrap sectionDark">
                 <div className="wrap">
                     <div className="sectionHead">
@@ -153,13 +179,18 @@ export default function HomePage() {
                     <div className="cardGrid">
                         {articles.map((a) => (
                             <div className="infoCard darkCard" key={a.id}>
-                                <img className="infoCardImg" src={a.image} alt={a.title} />
+                                <img
+                                    className="infoCardImg"
+                                    src={a.image}
+                                    alt={`${a.title} cover`}
+                                    loading="lazy"
+                                />
                                 <div className="infoCardBody">
                                     <div className="infoCardTitle">{a.title}</div>
                                     <div className="infoCardMeta">{a.date}</div>
-                                    <button className="btnGhost" type="button">
+                                    <Link className="btnGhost" href={`/articles/${a.id}`}>
                                         Read →
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))}
@@ -167,7 +198,6 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* TESTIMONIAL */}
             <section className="sectionWrap sectionLight">
                 <div className="wrap">
                     <div className="sectionHead">
@@ -180,8 +210,7 @@ export default function HomePage() {
                         <div>
                             <div className="testimonialName">Joseph David</div>
                             <div className="testimonialText">
-                                “Roamer made it ridiculously easy to find a destination and plan
-                                the trip.”
+                                “Roamer made it ridiculously easy to find a destination and plan the trip.”
                             </div>
                             <div className="testimonialMeta">Customer</div>
                         </div>
@@ -189,7 +218,6 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* CONTACT */}
             <section className="sectionWrap sectionContact">
                 <div className="wrap footerWrap">
                     <div className="footerGrid">
@@ -203,11 +231,27 @@ export default function HomePage() {
                             </div>
                         </div>
 
-                        <form className="footerForm" onSubmit={(e) => e.preventDefault()}>
-                            <input className="footerField" placeholder="Full name" />
-                            <input className="footerField" placeholder="Email" />
-                            <textarea className="footerField" rows={3} placeholder="Message" />
-                            <button className="footerBtn" type="button">
+                        <form className="footerForm">
+                            <input
+                                className="footerField"
+                                placeholder="Full name"
+                                aria-label="Full name"
+                                autoComplete="name"
+                            />
+                            <input
+                                className="footerField"
+                                placeholder="Email"
+                                aria-label="Email"
+                                autoComplete="email"
+                                type="email"
+                            />
+                            <textarea
+                                className="footerField"
+                                rows={3}
+                                placeholder="Message"
+                                aria-label="Message"
+                            />
+                            <button className="footerBtn" type="submit">
                                 Send
                             </button>
                         </form>

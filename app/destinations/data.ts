@@ -1,0 +1,291 @@
+export type Destination = {
+    id: string;
+    name: string;
+    country: string;
+    region: string;
+    tags: string[];
+    fromPrice: number;
+    rating: number;
+    description: string;
+    highlights: string[];
+    bestFor: string;
+    bestTime: string;
+    image: string;
+};
+
+export const DESTINATIONS: Destination[] = [
+    {
+        id: "dubai",
+        name: "Dubai",
+        country: "UAE",
+        region: "Middle East",
+        tags: ["hotels", "flights", "cars"],
+        fromPrice: 499,
+        rating: 4.8,
+        description: "Skyline stays, desert adventures, and premium shopping districts.",
+        highlights: ["Burj Khalifa views", "Desert safari", "Marina cruise"],
+        bestFor: "Luxury breaks & family-friendly resorts",
+        bestTime: "Nov–Mar",
+        image:
+            "https://images.pexels.com/photos/2044434/pexels-photo-2044434.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "abu-dhabi",
+        name: "Abu Dhabi",
+        country: "UAE",
+        region: "Middle East",
+        tags: ["hotels", "flights", "cars"],
+        fromPrice: 439,
+        rating: 4.7,
+        description: "Culture-rich escapes with pristine beaches and modern landmarks.",
+        highlights: ["Sheikh Zayed Mosque", "Louvre Abu Dhabi", "Yas Island"],
+        bestFor: "Cultural breaks & theme-park escapes",
+        bestTime: "Oct–Apr",
+        image:
+            "https://images.pexels.com/photos/2675614/pexels-photo-2675614.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "paris",
+        name: "Paris",
+        country: "France",
+        region: "Europe",
+        tags: ["hotels", "flights"],
+        fromPrice: 389,
+        rating: 4.6,
+        description: "Classic boulevards, river walks, and iconic landmarks.",
+        highlights: ["Eiffel Tower", "Seine cruises", "Montmartre cafés"],
+        bestFor: "Romantic getaways & city breaks",
+        bestTime: "Apr–Jun",
+        image:
+            "https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "london",
+        name: "London",
+        country: "UK",
+        region: "Europe",
+        tags: ["hotels", "flights", "cars"],
+        fromPrice: 329,
+        rating: 4.5,
+        description: "Museums, markets, and theatre nights in the heart of the UK.",
+        highlights: ["West End shows", "Thames strolls", "Royal parks"],
+        bestFor: "City explorers & weekend breaks",
+        bestTime: "May–Sep",
+        image:
+            "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "rome",
+        name: "Rome",
+        country: "Italy",
+        region: "Europe",
+        tags: ["hotels", "flights"],
+        fromPrice: 359,
+        rating: 4.6,
+        description: "Timeless ruins, trattorias, and vibrant piazzas.",
+        highlights: ["Colosseum tours", "Vatican City", "Food tastings"],
+        bestFor: "History lovers & food trails",
+        bestTime: "Apr–Jun",
+        image:
+            "https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "barcelona",
+        name: "Barcelona",
+        country: "Spain",
+        region: "Europe",
+        tags: ["hotels", "flights"],
+        fromPrice: 349,
+        rating: 4.6,
+        description: "Gaudí architecture, sunny beaches, and tapas nights.",
+        highlights: ["Sagrada Família", "Gothic Quarter", "Beachfront stays"],
+        bestFor: "Art lovers & seaside escapes",
+        bestTime: "May–Sep",
+        image:
+            "https://images.pexels.com/photos/1388030/pexels-photo-1388030.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "istanbul",
+        name: "Istanbul",
+        country: "Turkey",
+        region: "Europe",
+        tags: ["hotels", "flights", "cars"],
+        fromPrice: 319,
+        rating: 4.7,
+        description: "Two continents, bustling bazaars, and rich culinary culture.",
+        highlights: ["Hagia Sophia", "Grand Bazaar", "Bosphorus cruise"],
+        bestFor: "Culture seekers & foodies",
+        bestTime: "Mar–May",
+        image:
+            "https://images.pexels.com/photos/4091218/pexels-photo-4091218.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "tokyo",
+        name: "Tokyo",
+        country: "Japan",
+        region: "Asia",
+        tags: ["hotels", "flights"],
+        fromPrice: 599,
+        rating: 4.9,
+        description: "Neon districts, serene shrines, and world-class dining.",
+        highlights: ["Shibuya crossing", "Sushi tours", "Mt. Fuji day trip"],
+        bestFor: "Tech lovers & cultural immersion",
+        bestTime: "Mar–May",
+        image:
+            "https://images.pexels.com/photos/374870/pexels-photo-374870.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "seoul",
+        name: "Seoul",
+        country: "South Korea",
+        region: "Asia",
+        tags: ["hotels", "flights"],
+        fromPrice: 559,
+        rating: 4.7,
+        description: "Street food, palace tours, and K-culture hotspots.",
+        highlights: ["Gyeongbokgung", "Hongdae cafés", "Han River parks"],
+        bestFor: "Pop culture fans & city breaks",
+        bestTime: "Apr–Jun",
+        image:
+            "https://images.pexels.com/photos/373290/pexels-photo-373290.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "bangkok",
+        name: "Bangkok",
+        country: "Thailand",
+        region: "Asia",
+        tags: ["hotels", "flights"],
+        fromPrice: 399,
+        rating: 4.5,
+        description: "Riverside stays, vibrant markets, and night-time street food.",
+        highlights: ["Floating markets", "Temple tours", "Sky bar views"],
+        bestFor: "Food lovers & city explorers",
+        bestTime: "Nov–Feb",
+        image:
+            "https://images.pexels.com/photos/1840247/pexels-photo-1840247.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "bali",
+        name: "Bali",
+        country: "Indonesia",
+        region: "Asia",
+        tags: ["hotels", "flights"],
+        fromPrice: 429,
+        rating: 4.8,
+        description: "Surf beaches, wellness retreats, and jungle hideaways.",
+        highlights: ["Ubud temples", "Beach clubs", "Rice terraces"],
+        bestFor: "Relaxed retreats & wellness",
+        bestTime: "Apr–Oct",
+        image:
+            "https://images.pexels.com/photos/2474690/pexels-photo-2474690.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "cape-town",
+        name: "Cape Town",
+        country: "South Africa",
+        region: "Africa",
+        tags: ["hotels", "flights", "cars"],
+        fromPrice: 459,
+        rating: 4.8,
+        description: "Coastal drives, mountain views, and award-winning vineyards.",
+        highlights: ["Table Mountain", "Cape Peninsula", "Winelands tour"],
+        bestFor: "Road trips & nature escapes",
+        bestTime: "Nov–Mar",
+        image:
+            "https://images.pexels.com/photos/2115367/pexels-photo-2115367.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "cairo",
+        name: "Cairo",
+        country: "Egypt",
+        region: "Africa",
+        tags: ["hotels", "flights"],
+        fromPrice: 369,
+        rating: 4.4,
+        description: "Ancient wonders, bustling bazaars, and Nile cruises.",
+        highlights: ["Pyramids of Giza", "Egyptian Museum", "Nile dinner cruise"],
+        bestFor: "History fans & adventure seekers",
+        bestTime: "Oct–Apr",
+        image:
+            "https://images.pexels.com/photos/71241/pexels-photo-71241.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "marrakesh",
+        name: "Marrakesh",
+        country: "Morocco",
+        region: "Africa",
+        tags: ["hotels", "flights"],
+        fromPrice: 299,
+        rating: 4.5,
+        description: "Riad stays, colourful souks, and desert excursions.",
+        highlights: ["Jemaa el-Fnaa", "Atlas Mountains", "Spa hammams"],
+        bestFor: "Culture & boutique stays",
+        bestTime: "Mar–May",
+        image:
+            "https://images.pexels.com/photos/3889855/pexels-photo-3889855.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "sahara",
+        name: "Sahara Desert",
+        country: "Morocco",
+        region: "Africa",
+        tags: ["hotels", "flights", "cars"],
+        fromPrice: 519,
+        rating: 4.6,
+        description: "Golden dunes, luxury camps, and stargazing nights in the desert.",
+        highlights: ["Camel trekking", "Glamping camps", "Atlas gateway"],
+        bestFor: "Adventure seekers & off-grid escapes",
+        bestTime: "Oct–Apr",
+        image:
+            "https://images.pexels.com/photos/3873672/pexels-photo-3873672.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "new-york",
+        name: "New York",
+        country: "USA",
+        region: "North America",
+        tags: ["hotels", "flights"],
+        fromPrice: 649,
+        rating: 4.7,
+        description: "Iconic neighbourhoods, skyline views, and Broadway nights.",
+        highlights: ["Central Park", "Brooklyn bridge", "Broadway shows"],
+        bestFor: "City breaks & nightlife",
+        bestTime: "Sep–Nov",
+        image:
+            "https://images.pexels.com/photos/2224861/pexels-photo-2224861.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "vancouver",
+        name: "Vancouver",
+        country: "Canada",
+        region: "North America",
+        tags: ["hotels", "flights", "cars"],
+        fromPrice: 579,
+        rating: 4.6,
+        description: "Oceanfront city life with mountain adventures nearby.",
+        highlights: ["Stanley Park", "Grouse Mountain", "Granville Island"],
+        bestFor: "Outdoor escapes & city stays",
+        bestTime: "Jun–Sep",
+        image:
+            "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+    {
+        id: "sydney",
+        name: "Sydney",
+        country: "Australia",
+        region: "Oceania",
+        tags: ["hotels", "flights"],
+        fromPrice: 699,
+        rating: 4.8,
+        description: "Harbour views, coastal walks, and vibrant waterfront dining.",
+        highlights: ["Opera House", "Bondi Beach", "Harbour cruises"],
+        bestFor: "Summer escapes & seaside breaks",
+        bestTime: "Sep–Nov",
+        image:
+            "https://images.pexels.com/photos/2193300/pexels-photo-2193300.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    },
+];
+
+export function getDestinationById(id: string) {
+    return DESTINATIONS.find((destination) => destination.id === id);
+}

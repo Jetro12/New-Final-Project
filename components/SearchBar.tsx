@@ -9,14 +9,30 @@ function formatISO(dateStr: string): string {
 
 type Tab = "hotels" | "flights" | "cars";
 
-export default function SearchBar() {
-    const router = useRouter();
-    const [tab, setTab] = useState<Tab>("hotels");
+type SearchBarProps = {
+    initialWhere?: string;
+    initialStart?: string;
+    initialEnd?: string;
+    initialAdults?: number;
+    initialTab?: Tab;
+    variant?: "hero" | "inline";
+};
 
-    const [where, setWhere] = useState<string>("");
-    const [start, setStart] = useState<string>("");
-    const [end, setEnd] = useState<string>("");
-    const [adults, setAdults] = useState<number>(2);
+export default function SearchBar({
+                                      initialWhere = "",
+                                      initialStart = "",
+                                      initialEnd = "",
+                                      initialAdults = 2,
+                                      initialTab = "hotels",
+                                      variant = "hero",
+                                  }: SearchBarProps) {
+    const router = useRouter();
+    const [tab, setTab] = useState<Tab>(initialTab);
+
+    const [where, setWhere] = useState<string>(initialWhere);
+    const [start, setStart] = useState<string>(initialStart);
+    const [end, setEnd] = useState<string>(initialEnd);
+    const [adults, setAdults] = useState<number>(initialAdults);
 
     const canSearch = useMemo(() => where.trim().length >= 2, [where]);
 
@@ -34,8 +50,8 @@ export default function SearchBar() {
     }
 
     return (
-        <div className="searchWrap">
-            <div className="searchCard">
+        <div className={`searchWrap ${variant === "inline" ? "searchWrapInline" : ""}`}>
+            <div className={`searchCard ${variant === "inline" ? "searchCardInline" : ""}`}>
                 <div className="searchTabs">
                     <button
                         className={`tab ${tab === "hotels" ? "active" : ""}`}
@@ -66,6 +82,7 @@ export default function SearchBar() {
                         <input
                             className="searchInput"
                             placeholder="Search destinations (e.g., Dubai, Paris, Tokyo)"
+                            aria-label = "Search destinations"
                             value={where}
                             onChange={(e) => setWhere(e.target.value)}
                             onKeyDown={(e) => e.key === "Enter" && onSearch()}
@@ -87,6 +104,7 @@ export default function SearchBar() {
                         <input
                             className="searchInput"
                             type="date"
+                            min = {start || undefined}
                             value={end}
                             onChange={(e) => setEnd(e.target.value)}
                         />

@@ -2,22 +2,8 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
-type Dest = {
-    id: string;
-    name: string;
-    country: string;
-    tags: string[];
-};
-
-const DESTS: Dest[] = [
-    { id: "dubai", name: "Dubai", country: "UAE", tags: ["hotels", "flights", "cars"] },
-    { id: "paris", name: "Paris", country: "France", tags: ["hotels", "flights", "cars"] },
-    { id: "tokyo", name: "Tokyo", country: "Japan", tags: ["hotels", "flights"] },
-    { id: "bali", name: "Bali", country: "Indonesia", tags: ["hotels", "flights"] },
-    { id: "bangkok", name: "Bangkok", country: "Thailand", tags: ["hotels", "flights"] },
-    { id: "london", name: "London", country: "UK", tags: ["hotels", "flights", "cars"] },
-];
+import SearchBar from "@/components/SearchBar";
+import { DESTINATIONS } from "./data";
 
 export default function DestinationsPage() {
     const q = useSearchParams();
@@ -28,7 +14,7 @@ export default function DestinationsPage() {
     const end = q.get("end") || "";
     const adults = q.get("adults") || "2";
 
-    const filtered = DESTS.filter((d) => {
+    const filtered = DESTINATIONS.filter((d) => {
         const matchText =
             !query ||
             d.name.toLowerCase().includes(query) ||
@@ -56,20 +42,66 @@ export default function DestinationsPage() {
                     </div>
                 </div>
 
+                <div className="destSearch">
+                    <SearchBar
+                        key={`${query}-${type}-${start}-${end}-${adults}`}
+                        initialWhere={query}
+                        initialStart={start}
+                        initialEnd={end}
+                        initialAdults={Number(adults) > 0 ? Number(adults) : 2}
+                        initialTab={type === "cars" || type === "flights" ? type : "hotels"}
+                        variant="inline"
+                    />
+                </div>
+
                 <div className="destGrid">
                     {filtered.map((d) => (
                         <div className="destCard" key={d.id}>
-                            <div className="destCardTop">
-                                <div className="destName">{d.name}</div>
-                                <div className="destCountry">{d.country}</div>
+                            <div className="destCardImage">
+                                <img src={d.image} alt={`${d.name} skyline`} />
+                                <div className="destRating">★ {d.rating.toFixed(1)}</div>
                             </div>
 
-                            <div className="destTags">
-                                {d.tags.map((t) => (
-                                    <span className="tag" key={t}>
-                    {t}
-                  </span>
-                                ))}
+                            <div className="destCardTop">
+                                <div>
+                                    <div className="destName">{d.name}</div>
+                                    <div className="destCountry">
+                                        {d.country} • {d.region}
+                                    </div>
+                                </div>
+                                <div className="destPrice">From £{d.fromPrice}</div>
+                            </div>
+
+                            <div className="destBody">
+                                <p className="destDesc">{d.description}</p>
+
+                                <div className="destTags">
+                                    {d.tags.map((t) => (
+                                        <span className="tag" key={t}>
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <div className="destHighlights">
+                                    <div className="destLabel">Highlights</div>
+                                    <ul>
+                                        {d.highlights.map((h) => (
+                                            <li key={h}>{h}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                <div className="destMetaRow">
+                                    <div>
+                                        <span className="destLabel">Best for</span>
+                                        <div>{d.bestFor}</div>
+                                    </div>
+                                    <div>
+                                        <span className="destLabel">Best time</span>
+                                        <div>{d.bestTime}</div>
+                                    </div>
+                                </div>
                             </div>
 
                             <Link className="destBtn" href={`/booking/${d.id}`}>
@@ -80,7 +112,9 @@ export default function DestinationsPage() {
                 </div>
 
                 {filtered.length === 0 && (
-                    <div className="destEmpty">No matches. Try a different destination name.</div>
+                    <div className="destEmpty">
+                        No matches found. Try another search or remove filters to see more options.
+                    </div>
                 )}
             </div>
         </div>

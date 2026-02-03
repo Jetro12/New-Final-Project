@@ -12,12 +12,13 @@ type Props = {
 export default function SiteShell({ children }: Props) {
     const pathname = usePathname();
     const showHeader = pathname !== "/";
+    const showFooter = pathname !== "/";
 
     return (
         <>
             {showHeader && <Header />}
             {children}
-            <Footer />
+            {showFooter && <Footer />}
         </>
     );
 }
