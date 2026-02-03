@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/components/useAuth";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function AuthPage() {
-    const { user, signIn, signOut, providerLabels } = useAuth();
+    const { data: session, status } = useSession();
+    const user = session?.user;
 
     return (
         <div className="page">
@@ -19,14 +20,15 @@ export default function AuthPage() {
                     <button
                         type="button"
                         className="authProviderBtn"
-                        onClick={() => signIn("google")}
+                        onClick={() => signIn("google", { callbackUrl: "/destinations" })}
                     >
                         Continue with Google
                     </button>
+
                     <button
                         type="button"
                         className="authProviderBtn"
-                        onClick={() => signIn("microsoft")}
+                        onClick={() => signIn("azure-ad", { callbackUrl: "/destinations" })}
                     >
                         Continue with Microsoft
                     </button>
@@ -44,20 +46,20 @@ export default function AuthPage() {
                     <div>
                         <h4>Security</h4>
                         <p className="muted">
-                            We do not collect passwords. Authentication happens through your Google
-                            or Microsoft account.
+                            We do not collect passwords. Authentication happens through your Google or Microsoft account.
                         </p>
                     </div>
                 </div>
 
-                {user ? (
+                {status === "loading" ? (
+                    <div className="authHint">Checking session…</div>
+                ) : user ? (
                     <div className="authStatus">
                         <div>
-                            <strong>Signed in:</strong> {user.name} · {user.email} ·{" "}
-                            {providerLabels[user.provider]}
+                            <strong>Signed in:</strong> {user.name} · {user.email}
                         </div>
                         <div className="authActions">
-                            <button className="btn ghost" type="button" onClick={signOut}>
+                            <button className="btn ghost" type="button" onClick={() => signOut({ callbackUrl: "/" })}>
                                 Sign out
                             </button>
                             <Link className="btn" href="/destinations">
@@ -66,9 +68,7 @@ export default function AuthPage() {
                         </div>
                     </div>
                 ) : (
-                    <div className="authHint">
-                        Already have a booking in mind? Sign in above to continue.
-                    </div>
+                    <div className="authHint">Already have a booking in mind? Sign in above to continue.</div>
                 )}
             </section>
         </div>
