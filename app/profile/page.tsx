@@ -3,7 +3,7 @@
 import RequireAuth from "@/components/RequireAuth";
 import Link from "next/link";
 import { useMemo } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 type BookingStatus = "Upcoming" | "Completed" | "Cancelled";
 
@@ -79,7 +79,10 @@ export default function ProfilePage() {
 
     const stats = useMemo(() => {
         const totalTrips = upcomingBookings.length + pastBookings.length;
-        const totalSpend = [...upcomingBookings, ...pastBookings].reduce((sum, b) => sum + b.total, 0);
+        const totalSpend = [...upcomingBookings, ...pastBookings].reduce(
+            (sum, b) => sum + b.total,
+            0
+        );
         const countriesVisited = new Set(pastBookings.map((b) => b.country)).size;
         return { totalTrips, totalSpend, countriesVisited };
     }, [upcomingBookings, pastBookings]);
@@ -93,7 +96,11 @@ export default function ProfilePage() {
                         <div className="profileAvatar">
                             {user?.image ? (
                                 // eslint-disable-next-line @next/next/no-img-element
-                                <img src={user.image} alt="Profile" referrerPolicy="no-referrer" />
+                                <img
+                                    src={user.image}
+                                    alt="Profile"
+                                    referrerPolicy="no-referrer"
+                                />
                             ) : (
                                 <div className="profileAvatarFallback">
                                     {(user?.name?.[0] ?? "R").toUpperCase()}
@@ -101,27 +108,46 @@ export default function ProfilePage() {
                             )}
                         </div>
 
-                        <div className="profileHeadText">
+                        <div className="profileHeadText" style={{ flex: 1 }}>
                             <h1>Profile</h1>
-                            <p className="muted">Your Roamer account details and travel overview.</p>
+                            <p className="muted">
+                                Your Roamer account details and travel overview.
+                            </p>
                         </div>
+
+                        {/* ✅ Sign out button */}
+                        <button
+                            type="button"
+                            className="appSignOutBtn"
+                            onClick={() => signOut({ callbackUrl: "/" })}
+                        >
+                            Sign out
+                        </button>
                     </div>
 
                     {/* Quick stats */}
                     <div className="profileStats">
                         <div className="profileStat">
                             <span className="profileStatLabel">Trips</span>
-                            <strong className="profileStatValue">{stats.totalTrips}</strong>
+                            <strong className="profileStatValue">
+                                {stats.totalTrips}
+                            </strong>
                         </div>
 
                         <div className="profileStat">
-                            <span className="profileStatLabel">Countries visited</span>
-                            <strong className="profileStatValue">{stats.countriesVisited}</strong>
+                            <span className="profileStatLabel">
+                                Countries visited
+                            </span>
+                            <strong className="profileStatValue">
+                                {stats.countriesVisited}
+                            </strong>
                         </div>
 
                         <div className="profileStat">
                             <span className="profileStatLabel">Total spend</span>
-                            <strong className="profileStatValue">£{stats.totalSpend}</strong>
+                            <strong className="profileStatValue">
+                                £{stats.totalSpend}
+                            </strong>
                         </div>
                     </div>
 
@@ -137,7 +163,7 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {/* Upcoming */}
+                    {/* Upcoming bookings */}
                     <div className="profileSection">
                         <div className="profileSectionHead">
                             <h2>Upcoming bookings</h2>
@@ -149,29 +175,38 @@ export default function ProfilePage() {
                         <div className="profileList">
                             {upcomingBookings.map((b) => (
                                 <div className="profileBooking" key={b.id}>
-                                    <div className="profileBookingLeft">
+                                    <div>
                                         <div className="profileBookingTitle">
                                             {b.destination}, {b.country}
                                         </div>
                                         <div className="profileBookingMeta">
-                                            {b.dates} • {b.travellers} traveller{b.travellers > 1 ? "s" : ""}
+                                            {b.dates} • {b.travellers} traveller
+                                            {b.travellers > 1 ? "s" : ""}
                                         </div>
                                     </div>
 
                                     <div className="profileBookingRight">
-                                        <span className={`profilePill ${pillClass(b.status)}`}>{b.status}</span>
+                                        <span
+                                            className={`profilePill ${pillClass(
+                                                b.status
+                                            )}`}
+                                        >
+                                            {b.status}
+                                        </span>
                                         <strong>£{b.total}</strong>
                                     </div>
                                 </div>
                             ))}
 
                             {upcomingBookings.length === 0 && (
-                                <div className="profileEmpty">No upcoming bookings yet.</div>
+                                <div className="profileEmpty">
+                                    No upcoming bookings yet.
+                                </div>
                             )}
                         </div>
                     </div>
 
-                    {/* Past */}
+                    {/* Past bookings */}
                     <div className="profileSection">
                         <div className="profileSectionHead">
                             <h2>Past bookings</h2>
@@ -183,32 +218,41 @@ export default function ProfilePage() {
                         <div className="profileList">
                             {pastBookings.map((b) => (
                                 <div className="profileBooking" key={b.id}>
-                                    <div className="profileBookingLeft">
+                                    <div>
                                         <div className="profileBookingTitle">
                                             {b.destination}, {b.country}
                                         </div>
                                         <div className="profileBookingMeta">
-                                            {b.dates} • {b.travellers} traveller{b.travellers > 1 ? "s" : ""}
+                                            {b.dates} • {b.travellers} traveller
+                                            {b.travellers > 1 ? "s" : ""}
                                         </div>
                                     </div>
 
                                     <div className="profileBookingRight">
-                                        <span className={`profilePill ${pillClass(b.status)}`}>{b.status}</span>
+                                        <span
+                                            className={`profilePill ${pillClass(
+                                                b.status
+                                            )}`}
+                                        >
+                                            {b.status}
+                                        </span>
                                         <strong>£{b.total}</strong>
                                     </div>
                                 </div>
                             ))}
 
                             {pastBookings.length === 0 && (
-                                <div className="profileEmpty">No past bookings yet.</div>
+                                <div className="profileEmpty">
+                                    No past bookings yet.
+                                </div>
                             )}
                         </div>
                     </div>
 
-                    {/* Saved places + Travel preferences */}
+                    {/* Saved + Preferences */}
                     <div className="profileGrid2">
                         <div className="profilePanel">
-                            <div className="profileSectionHead" style={{ marginBottom: 10 }}>
+                            <div className="profileSectionHead">
                                 <h2>Saved places</h2>
                                 <Link className="profileLink" href="/destinations">
                                     Explore →
@@ -230,6 +274,7 @@ export default function ProfilePage() {
 
                         <div className="profilePanel">
                             <h2 style={{ marginTop: 0 }}>Travel preferences</h2>
+
                             <div className="prefs">
                                 <div className="prefRow">
                                     <span>Default travellers</span>

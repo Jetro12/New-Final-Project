@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
 import { DESTINATIONS } from "./data";
-import RequireAuth from "@/components/RequireAuth";
-
 
 export default function DestinationsPage() {
     const q = useSearchParams();
@@ -31,17 +29,23 @@ export default function DestinationsPage() {
         <div className="destPage">
             <div className="destWrap">
                 <div className="destHeader">
-                    <h1>Destinations</h1>
-                    <div className="destSub">
-                        {query ? (
-                            <>
-                                Showing results for <strong>{query}</strong> • {type}{" "}
-                                {start && end ? `• ${start} → ${end}` : ""} • {adults} adults
-                            </>
-                        ) : (
-                            "Browse destinations and start planning."
-                        )}
+                    <div>
+                        <h1>Destinations</h1>
+                        <div className="destSub">
+                            {query ? (
+                                <>
+                                    Showing results for <strong>{query}</strong> • {type}
+                                    {start && end ? ` • ${start} → ${end}` : ""} • {adults} adults
+                                </>
+                            ) : (
+                                "Browse destinations and start planning."
+                            )}
+                        </div>
                     </div>
+
+                    <Link className="destCta" href="/">
+                        ← Back home
+                    </Link>
                 </div>
 
                 <div className="destSearch">
@@ -51,7 +55,7 @@ export default function DestinationsPage() {
                         initialStart={start}
                         initialEnd={end}
                         initialAdults={Number(adults) > 0 ? Number(adults) : 2}
-                        initialTab={type === "cars" || type === "flights" ? type : "hotels"}
+                        initialTab={type === "cars" || type === "flights" ? (type as any) : "hotels"}
                         variant="inline"
                     />
                 </div>
@@ -60,74 +64,70 @@ export default function DestinationsPage() {
                     {filtered.map((d) => (
                         <div className="destCard" key={d.id}>
                             <div className="destCardImage">
-                                <img src={d.image} alt={`${d.name} skyline`} />
+                                <img src={d.image} alt={`${d.name} view`} loading="lazy" />
                                 <div className="destRating">★ {d.rating.toFixed(1)}</div>
                             </div>
 
-                            <div className="destCardTop">
-                                <div>
-                                    <div className="destName">{d.name}</div>
-                                    <div className="destCountry">
-                                        {d.country} • {d.region}
+                            {/* ✅ IMPORTANT: put the content inside destCardBody (your CSS expects that) */}
+                            <div className="destCardBody">
+                                <div className="destCardTop">
+                                    <div>
+                                        <div className="destName">{d.name}</div>
+                                        <div className="destCountry">
+                                            {d.country} • {d.region}
+                                        </div>
                                     </div>
+                                    <div className="destPrice">From £{d.fromPrice}</div>
                                 </div>
-                                <div className="destPrice">From £{d.fromPrice}</div>
-                            </div>
 
-                            <div className="destBody">
+                                {/* ✅ Simplified: keep it clean */}
                                 <p className="destDesc">{d.description}</p>
 
                                 <div className="destTags">
                                     {d.tags.map((t) => (
                                         <span className="tag" key={t}>
-                                            {t}
-                                        </span>
+                      {t}
+                    </span>
                                     ))}
                                 </div>
 
-                                <div className="destHighlights">
-                                    <div className="destLabel">Highlights</div>
-                                    <ul>
-                                        {d.highlights.map((h) => (
-                                            <li key={h}>{h}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-
-                                <div className="destMetaRow">
+                                {/* ✅ Mini meta box to keep it tidy */}
+                                <div className="destMiniMeta">
                                     <div>
                                         <span className="destLabel">Best for</span>
-                                        <div>{d.bestFor}</div>
+                                        <strong>{d.bestFor}</strong>
                                     </div>
                                     <div>
                                         <span className="destLabel">Best time</span>
-                                        <div>{d.bestTime}</div>
+                                        <strong>{d.bestTime}</strong>
                                     </div>
                                 </div>
-                            </div>
 
-                            <Link className="destBtn" href={`/booking/${d.id}`}>
-                                Book this trip →
-                            </Link>
+                                <ul className="destMiniHighlights">
+                                    {d.highlights.slice(0, 3).map((h) => (
+                                        <li key={h}>{h}</li>
+                                    ))}
+                                </ul>
+
+                                <div className="destActions">
+                                    <Link className="destGhost" href={`/destinations/${d.id}`}>
+                                        Details →
+                                    </Link>
+                                    <Link className="destBtn" href={`/booking/${d.id}`}>
+                                        Book →
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>
 
                 {filtered.length === 0 && (
                     <div className="destEmpty">
-                        No matches found. Try another search or remove filters to see more options.
+                        No matches found. Try another search or remove filters.
                     </div>
                 )}
             </div>
         </div>
     );
-
-    return (
-        <RequireAuth>
-            <div className="destPage">
-                ...
-            </div>
-        </RequireAuth>
-    );
-
 }

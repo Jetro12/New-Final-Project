@@ -2368,4 +2368,42 @@ body {
   }
 }
 
+/* =========================
+   DESTINATION PAGE - SIMPLIFIED CARD BITS
+========================= */
+
+.destCardBody{
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.destMiniMeta{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(7,22,28,0.04);
+  border: 1px solid rgba(0,0,0,0.06);
+  font-weight: 700;
+  color: rgba(0,0,0,0.72);
+}
+
+.destMiniMeta strong{
+  color: rgba(0,0,0,0.85);
+}
+
+.destMiniHighlights{
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(0,0,0,0.70);
+  font-weight: 650;
+}
+
+.destMiniHighlights li{
+  margin: 4px 0;
+}
+
 

@@ -41,8 +41,7 @@ export const DESTINATIONS: Destination[] = [
         highlights: ["Sheikh Zayed Mosque", "Louvre Abu Dhabi", "Yas Island"],
         bestFor: "Cultural breaks & theme-park escapes",
         bestTime: "Oct–Apr",
-        image:
-            "https://images.pexels.com/photos/2675614/pexels-photo-2675614.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        image: "https://wallpaperaccess.com/full/2241630.jpg",
     },
     {
         id: "paris",
@@ -56,8 +55,7 @@ export const DESTINATIONS: Destination[] = [
         highlights: ["Eiffel Tower", "Seine cruises", "Montmartre cafés"],
         bestFor: "Romantic getaways & city breaks",
         bestTime: "Apr–Jun",
-        image:
-            "https://images.pexels.com/photos/699466/pexels-photo-699466.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        image: "https://tse4.mm.bing.net/th/id/OIP.RgAc0Vv6udkUS7dGkphotwHaE7?rs=1&pid=ImgDetMain&o=7&rm=3",
     },
     {
         id: "london",
@@ -117,7 +115,7 @@ export const DESTINATIONS: Destination[] = [
         bestFor: "Culture seekers & foodies",
         bestTime: "Mar–May",
         image:
-            "https://images.pexels.com/photos/4091218/pexels-photo-4091218.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://tse1.mm.bing.net/th/id/OIP.ci6q5nx5r4Ci7EY_yvg9rgHaE7?rs=1&pid=ImgDetMain&o=7&rm=3",
     },
     {
         id: "tokyo",
@@ -161,8 +159,7 @@ export const DESTINATIONS: Destination[] = [
         highlights: ["Floating markets", "Temple tours", "Sky bar views"],
         bestFor: "Food lovers & city explorers",
         bestTime: "Nov–Feb",
-        image:
-            "https://images.pexels.com/photos/1840247/pexels-photo-1840247.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        image: "https://tse4.mm.bing.net/th/id/OIP.ZHyF5Xhz-Xy-hK-_tLKWqwHaEo?w=1600&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3",
     },
     {
         id: "bali",
@@ -179,6 +176,64 @@ export const DESTINATIONS: Destination[] = [
         image:
             "https://images.pexels.com/photos/2474690/pexels-photo-2474690.jpeg?auto=compress&cs=tinysrgb&w=1200",
     },
+
+    {
+        id: "singapore",
+        name: "Singapore",
+        country: "Singapore",
+        region: "Asia",
+        tags: ["hotels", "flights"],
+        fromPrice: 589,
+        rating: 4.8,
+        description: "Sky gardens, waterfront dining, and futuristic city breaks.",
+        highlights: ["Marina Bay Sands", "Gardens by the Bay", "Hawker centres"],
+        bestFor: "Clean city breaks & food lovers",
+        bestTime: "Feb–Apr",
+        image: "https://as2.ftcdn.net/v2/jpg/02/09/82/45/1000_F_209824591_K05Tob490TmBlTekkPlNrxh1Hy7IKMTU.jpg",
+    },
+    {
+        id: "lisbon",
+        name: "Lisbon",
+        country: "Portugal",
+        region: "Europe",
+        tags: ["hotels", "flights"],
+        fromPrice: 279,
+        rating: 4.6,
+        description: "Sunset viewpoints, tiled streets, and coastal day trips.",
+        highlights: ["Tram rides", "Belém pastries", "Miradouros"],
+        bestFor: "Weekend breaks & laid-back exploring",
+        bestTime: "Apr–Jun",
+        image: "https://tse2.mm.bing.net/th/id/OIP.XG2GoGpX25C4laiOeAXWyQHaE7?rs=1&pid=ImgDetMain&o=7&rm=3",
+    },
+    {
+        id: "amsterdam",
+        name: "Amsterdam",
+        country: "Netherlands",
+        region: "Europe",
+        tags: ["hotels", "flights"],
+        fromPrice: 319,
+        rating: 4.6,
+        description: "Canal walks, museums, and cosy cafés across the city.",
+        highlights: ["Canal cruise", "Museum Quarter", "Jordaan"],
+        bestFor: "Culture trips & scenic strolls",
+        bestTime: "Apr–May",
+        image: "https://lp-cms-production.imgix.net/2020-11/shutterstockRF_1040638333.jpg?auto=format&fit=crop&sharp=10&vib=20&ixlib=react-8.6.4&w=850&q=20&dpr=5",
+    },
+    {
+        id: "los-angeles",
+        name: "Los Angeles",
+        country: "USA",
+        region: "North America",
+        tags: ["hotels", "flights", "cars"],
+        fromPrice: 629,
+        rating: 4.5,
+        description: "Beach drives, iconic film spots, and sunny neighbourhoods.",
+        highlights: ["Santa Monica", "Hollywood", "Griffith Observatory"],
+        bestFor: "Road trips & sunshine breaks",
+        bestTime: "May–Oct",
+        image: "https://tse1.mm.bing.net/th/id/OIP.VMDv_P0BjTrQg8o075BhnAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+    },
+
     {
         id: "cape-town",
         name: "Cape Town",
@@ -251,8 +306,7 @@ export const DESTINATIONS: Destination[] = [
         highlights: ["Central Park", "Brooklyn bridge", "Broadway shows"],
         bestFor: "City breaks & nightlife",
         bestTime: "Sep–Nov",
-        image:
-            "https://images.pexels.com/photos/2224861/pexels-photo-2224861.jpeg?auto=compress&cs=tinysrgb&w=1200",
+        image: "https://i.natgeofe.com/n/874df281-d3e0-489a-98c0-6b840023b828/newyork_NationalGeographic_2328428.jpg",
     },
     {
         id: "vancouver",
