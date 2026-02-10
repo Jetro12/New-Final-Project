@@ -57,37 +57,10 @@ export default function AuthPage() {
 
                     <h1 className="authTitle">Sign in to Roamer</h1>
                     <p className="authSubtitle">
-                        Roamer uses secure Google or Microsoft authentication only. Connect your account once
-                        to unlock bookings, saved trips, and personalized recommendations.
+                        Sign in with Google or Microsoft to save trips and manage bookings.
                     </p>
 
-                    <div className="authSocialRow">
-                        <button
-                            type="button"
-                            className="authIconBtn"
-                            onClick={() => signIn("google", { callbackUrl: "/destinations" })}
-                            aria-label="Continue with Google"
-                            title="Continue with Google"
-                        >
-                            <GoogleIcon />
-                        </button>
 
-                        <button
-                            type="button"
-                            className="authIconBtn"
-                            onClick={() => signIn("azure-ad", { callbackUrl: "/destinations" })}
-                            aria-label="Continue with Microsoft"
-                            title="Continue with Microsoft"
-                        >
-                            <MicrosoftIcon />
-                        </button>
-                    </div>
-
-                    <div className="authOrRow">
-                        <span />
-                        <small>OR</small>
-                        <span />
-                    </div>
 
                     <div className="authProvidersStack">
                         <button
@@ -117,16 +90,16 @@ export default function AuthPage() {
                         <div>
                             <h4>Why sign in?</h4>
                             <ul>
-                                <li>Store traveler details to speed up checkout.</li>
-                                <li>Manage bookings and payment schedules in one place.</li>
-                                <li>Get destination alerts when prices drop.</li>
+                                <li>Faster checkout</li>
+                                <li>Manage bookings in one place</li>
+                                <li>Price drop alerts</li>
                             </ul>
+
                         </div>
                         <div>
                             <h4>Security</h4>
                             <p>
-                                We do not collect passwords. Authentication happens through your Google or Microsoft
-                                account.
+                                No passwords. Secure sign-in via Google or Microsoft.
                             </p>
                         </div>
                     </div>

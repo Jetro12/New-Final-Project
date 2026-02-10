@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 
 type Slide = {
     id: string;
@@ -47,7 +48,18 @@ const slides: Slide[] = [
     },
 ];
 
+function initials(name?: string | null) {
+    if (!name) return "U";
+    const parts = name.trim().split(/\s+/);
+    const a = parts[0]?.[0] ?? "U";
+    const b = parts.length > 1 ? parts[parts.length - 1]?.[0] ?? "" : "";
+    return (a + b).toUpperCase();
+}
+
 export default function HeroCarousel() {
+    const { data: session, status } = useSession();
+    const user = session?.user;
+
     const [index, setIndex] = useState<number>(0);
     const slide = slides[index];
     const dots = useMemo(() => slides.map((s) => s.id), []);
@@ -76,9 +88,61 @@ export default function HeroCarousel() {
                     </div>
 
                     <div className="roamerNavRight">
-                        <Link href="/auth" className="roamerLink roamerLinkPill">
-                            Sign in
-                        </Link>
+                        {status === "loading" ? (
+                            <span className="roamerLink roamerLinkPill" style={{ opacity: 0.75 }}>
+                Loading…
+              </span>
+                        ) : user ? (
+                            <Link
+                                href="/profile"
+                                className="roamerLink roamerLinkPill"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: 10,
+                                    padding: "8px 12px",
+                                }}
+                                aria-label="Go to profile"
+                            >
+                                {user.image ? (
+                                    <img
+                                        src={user.image}
+                                        alt="Profile"
+                                        referrerPolicy="no-referrer"
+                                        style={{
+                                            width: 32,
+                                            height: 32,
+                                            borderRadius: 999,
+                                            objectFit: "cover",
+                                            border: "1px solid rgba(255,255,255,0.25)",
+                                        }}
+                                    />
+                                ) : (
+                                    <span
+                                        aria-hidden="true"
+                                        style={{
+                                            width: 32,
+                                            height: 32,
+                                            borderRadius: 999,
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            fontWeight: 900,
+                                            background: "rgba(255,255,255,0.12)",
+                                            border: "1px solid rgba(255,255,255,0.22)",
+                                            color: "rgba(255,255,255,0.92)",
+                                        }}
+                                    >
+                    {initials(user.name)}
+                  </span>
+                                )}
+                                <span style={{ fontWeight: 900 }}>Profile</span>
+                            </Link>
+                        ) : (
+                            <Link href="/auth" className="roamerLink roamerLinkPill">
+                                Sign in
+                            </Link>
+                        )}
                     </div>
                 </div>
 
@@ -110,6 +174,7 @@ export default function HeroCarousel() {
                                     type="button"
                                     className={`roamerDot ${i === index ? "active" : ""}`}
                                     onClick={() => setIndex(i)}
+                                    aria-label={`Go to ${d}`}
                                 />
                             ))}
                         </div>
@@ -118,12 +183,24 @@ export default function HeroCarousel() {
                     <div className="roamerRight">
                         {slide.thumbs.map((src, i) => (
                             <button
-                                key={src}
+                                key={`${slide.id}-${i}`}
                                 type="button"
                                 className={`roamerThumb t${i + 1}`}
                                 onClick={() => setIndex((prev) => (prev + 1) % slides.length)}
+                                aria-label="Next slide"
                             >
-                                <img src={src} alt="preview" />
+                                <img
+                                    src={src}
+                                    alt="preview"
+                                    loading="eager"
+                                    decoding="async"
+                                    referrerPolicy="no-referrer"
+                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                    onError={(e) => {
+                                        // If a thumb fails, fall back to the current hero image
+                                        e.currentTarget.src = slide.hero;
+                                    }}
+                                />
                                 <div className="roamerPlay">▶</div>
                             </button>
                         ))}
