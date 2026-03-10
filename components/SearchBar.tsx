@@ -7,29 +7,39 @@ function formatISO(dateStr: string): string {
     return (dateStr || "").trim();
 }
 
-type Tab = "hotels" | "flights" | "cars";
-
 type SearchBarProps = {
     initialWhere?: string;
+    initialRegion?: string;
     initialStart?: string;
     initialEnd?: string;
     initialAdults?: number;
-    initialTab?: Tab;
     variant?: "hero" | "inline";
 };
 
+const regions = [
+    "All Regions",
+    "Europe",
+    "Asia",
+    "Africa",
+    "North America",
+    "South America",
+    "Oceania",
+    "Middle East",
+    "Caribbean",
+];
+
 export default function SearchBar({
                                       initialWhere = "",
+                                      initialRegion = "All Regions",
                                       initialStart = "",
                                       initialEnd = "",
                                       initialAdults = 2,
-                                      initialTab = "hotels",
                                       variant = "hero",
                                   }: SearchBarProps) {
     const router = useRouter();
-    const [tab, setTab] = useState<Tab>(initialTab);
 
     const [where, setWhere] = useState<string>(initialWhere);
+    const [region, setRegion] = useState<string>(initialRegion);
     const [start, setStart] = useState<string>(initialStart);
     const [end, setEnd] = useState<string>(initialEnd);
     const [adults, setAdults] = useState<number>(initialAdults);
@@ -41,7 +51,11 @@ export default function SearchBar({
 
         const params = new URLSearchParams();
         params.set("q", where.trim());
-        params.set("type", tab);
+
+        if (region && region !== "All Regions") {
+            params.set("region", region);
+        }
+
         if (start) params.set("start", formatISO(start));
         if (end) params.set("end", formatISO(end));
         params.set("adults", String(adults));
@@ -52,41 +66,33 @@ export default function SearchBar({
     return (
         <div className={`searchWrap ${variant === "inline" ? "searchWrapInline" : ""}`}>
             <div className={`searchCard ${variant === "inline" ? "searchCardInline" : ""}`}>
-                <div className="searchTabs">
-                    <button
-                        className={`tab ${tab === "hotels" ? "active" : ""}`}
-                        type="button"
-                        onClick={() => setTab("hotels")}
-                    >
-                        Hotels
-                    </button>
-                    <button
-                        className={`tab ${tab === "flights" ? "active" : ""}`}
-                        type="button"
-                        onClick={() => setTab("flights")}
-                    >
-                        Flights
-                    </button>
-                    <button
-                        className={`tab ${tab === "cars" ? "active" : ""}`}
-                        type="button"
-                        onClick={() => setTab("cars")}
-                    >
-                        Car Rentals
-                    </button>
-                </div>
-
                 <div className="searchRow">
                     <label className="fieldBox wide">
                         <span className="fieldLabel">Where to?</span>
                         <input
                             className="searchInput"
                             placeholder="Search destinations (e.g., Dubai, Paris, Tokyo)"
-                            aria-label = "Search destinations"
+                            aria-label="Search destinations"
                             value={where}
                             onChange={(e) => setWhere(e.target.value)}
                             onKeyDown={(e) => e.key === "Enter" && onSearch()}
                         />
+                    </label>
+
+                    <label className="fieldBox">
+                        <span className="fieldLabel">Region</span>
+                        <select
+                            className="searchSelect"
+                            aria-label="Select region"
+                            value={region}
+                            onChange={(e) => setRegion(e.target.value)}
+                        >
+                            {regions.map((item) => (
+                                <option key={item} value={item}>
+                                    {item}
+                                </option>
+                            ))}
+                        </select>
                     </label>
 
                     <label className="fieldBox">
@@ -104,7 +110,7 @@ export default function SearchBar({
                         <input
                             className="searchInput"
                             type="date"
-                            min = {start || undefined}
+                            min={start || undefined}
                             value={end}
                             onChange={(e) => setEnd(e.target.value)}
                         />
@@ -112,14 +118,22 @@ export default function SearchBar({
 
                     <label className="fieldBox">
                         <span className="fieldLabel">Adults</span>
-                        <input
-                            className="searchInput"
-                            type="number"
-                            min={1}
-                            max={12}
-                            value={adults}
-                            onChange={(e) => setAdults(Number(e.target.value || 2))}
-                        />
+
+                        <div className="adultsControl">
+                            <button
+                                type="button"
+                                onClick={() => setAdults(Math.max(1, adults - 1))}
+                            >
+                                -
+                            </button>
+                            <span className="adultsValue">{adults}</span>
+                            <button
+                                type="button"
+                                onClick={() => setAdults(Math.min(12, adults + 1))}
+                            >
+                                +
+                            </button>
+                        </div>
                     </label>
                 </div>
 

@@ -7,6 +7,11 @@ const handler = NextAuth({
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            authorization: {
+                params: {
+                    prompt: "select_account",
+                },
+            },
         }),
         AzureADProvider({
             clientId: process.env.MICROSOFT_CLIENT_ID!,
@@ -20,8 +25,6 @@ const handler = NextAuth({
             if (account && profile) {
                 const p = profile as any;
 
-                // Google typically: p.picture
-                // Azure AD / Microsoft may vary: p.picture, p.avatar_url, p.photo, p.photos[0].value
                 const image =
                     p.picture ||
                     p.avatar_url ||
@@ -30,8 +33,6 @@ const handler = NextAuth({
                     token.picture;
 
                 token.picture = image;
-
-                // Also store name/email when available (harmless + helps consistency)
                 token.name = token.name ?? p.name ?? p.displayName;
                 token.email = token.email ?? p.email ?? p.preferred_username;
             }
@@ -42,14 +43,14 @@ const handler = NextAuth({
         async session({ session, token }) {
             if (session.user) {
                 session.user.image = (token as any).picture as string | undefined;
-                session.user.name = session.user.name ?? (token.name as string | undefined);
-                session.user.email = session.user.email ?? (token.email as string | undefined);
+                session.user.name =
+                    session.user.name ?? (token.name as string | undefined);
+                session.user.email =
+                    session.user.email ?? (token.email as string | undefined);
             }
             return session;
         },
     },
-
-
 });
 
 export { handler as GET, handler as POST };
