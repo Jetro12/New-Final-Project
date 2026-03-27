@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
 import { getDestinations, type Destination } from "@/lib/data/destinations";
 
-export default function DestinationsPage() {
+function DestinationsContent() {
     const q = useSearchParams();
 
     const query = (q.get("q") || "").trim().toLowerCase();
@@ -51,6 +51,7 @@ export default function DestinationsPage() {
             })
             .sort((a, b) => a.name.localeCompare(b.name));
     }, [destinations, query, type]);
+
     return (
         <div className="destPage">
             <div className="destWrap">
@@ -88,7 +89,6 @@ export default function DestinationsPage() {
                 </div>
 
                 {loading && <div className="destEmpty">Loading destinations...</div>}
-
                 {error && <div className="destEmpty">{error}</div>}
 
                 {!loading && !error && (
@@ -161,5 +161,13 @@ export default function DestinationsPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function DestinationsPage() {
+    return (
+        <Suspense fallback={<div className="destEmpty">Loading destinations...</div>}>
+            <DestinationsContent />
+        </Suspense>
     );
 }
