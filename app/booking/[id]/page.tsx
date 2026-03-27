@@ -1,14 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import RequireAuth from "@/components/RequireAuth";
-import { getDestinationById } from "@/app/destinations/data";
-
-type Props = {
-    params: { id: string };
-};
+import { getDestinationById, type Destination } from "@/lib/data/destinations";
 
 type BookingForm = {
     start: string;
@@ -24,10 +21,15 @@ type BookingForm = {
 
 type FormErrors = Partial<Record<keyof BookingForm, string>>;
 
-export default function BookingPage({ params }: Props) {
-    const destination = getDestinationById(params.id);
+export default function BookingPage() {
+    const params = useParams();
+    const id = typeof params.id === "string" ? params.id : "";
+
     const { data: session, status } = useSession();
     const user = session?.user;
+
+    const [destination, setDestination] = useState<Destination | null>(null);
+    const [destinationLoading, setDestinationLoading] = useState(true);
 
     const [errors, setErrors] = useState<FormErrors>({});
     const [submitted, setSubmitted] = useState(false);
@@ -44,25 +46,27 @@ export default function BookingPage({ params }: Props) {
         requests: "",
     });
 
+    useEffect(() => {
+        const loadDestination = async () => {
+            if (!id) {
+                setDestination(null);
+                setDestinationLoading(false);
+                return;
+            }
+
+            const data = await getDestinationById(id);
+            setDestination(data);
+            setDestinationLoading(false);
+        };
+
+        loadDestination();
+    }, [id]);
+
     const estimatedTotal = useMemo(() => {
         if (!destination) return 0;
-        const travellerCount = Number.isFinite(form.travellers) ? form.travellers : 1;
+        const travellerCount = Number.isFinite(form.travellers) && form.travellers > 0 ? form.travellers : 1;
         return destination.fromPrice * travellerCount;
     }, [destination, form.travellers]);
-
-    if (!destination) {
-        return (
-            <div className="page">
-                <section className="section">
-                    <h2>Booking unavailable</h2>
-                    <p className="muted">We couldn’t find that destination. Choose another trip.</p>
-                    <Link className="btn" href="/destinations">
-                        Browse destinations
-                    </Link>
-                </section>
-            </div>
-        );
-    }
 
     function updateField<K extends keyof BookingForm>(key: K, value: BookingForm[K]) {
         setForm((prev) => ({ ...prev, [key]: value }));
@@ -95,9 +99,22 @@ export default function BookingPage({ params }: Props) {
         setSubmitted(true);
     }
 
-    // ✅ Must be signed in to book
-    if (status === "loading") {
+    if (destinationLoading || status === "loading") {
         return <div className="page">Loading…</div>;
+    }
+
+    if (!destination) {
+        return (
+            <div className="page">
+                <section className="section">
+                    <h2>Booking unavailable</h2>
+                    <p className="muted">We couldn’t find that destination. Choose another trip.</p>
+                    <Link className="btn" href="/destinations">
+                        Browse destinations
+                    </Link>
+                </section>
+            </div>
+        );
     }
 
     if (status !== "authenticated") {
@@ -106,6 +123,10 @@ export default function BookingPage({ params }: Props) {
                 <section className="section bookingLayout">
                     <div className="bookingMain">
                         <div className="bookingHeader">
+                            <Link className="bookingBack" href="/destinations">
+                                ← Back to destinations
+                            </Link>
+
                             <p className="bookingOverline">Booking</p>
                             <h2>
                                 {destination.name}, {destination.country}
@@ -141,9 +162,9 @@ export default function BookingPage({ params }: Props) {
                                 We only support Google or Microsoft sign-in for account security.
                             </p>
 
-                            <div style={{ marginTop: 12 }}>
+                            <div className="bookingFooterActions">
                                 <Link className="btn ghost" href="/destinations">
-                                    Back to destinations
+                                    Cancel booking
                                 </Link>
                             </div>
                         </div>
@@ -169,19 +190,32 @@ export default function BookingPage({ params }: Props) {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="bookingHighlights">
+                            <h4>What’s included</h4>
+                            <ul>
+                                <li>Flexible hotel options and verified reviews</li>
+                                <li>24/7 travel support once booked</li>
+                                <li>Optional add-ons for tours and transfers</li>
+                                <li>Secure payments with deposits available</li>
+                            </ul>
+                        </div>
                     </aside>
                 </section>
             </div>
         );
     }
 
-    // ✅ Signed in → show form
     return (
         <RequireAuth>
             <div className="page">
                 <section className="section bookingLayout">
                     <div className="bookingMain">
                         <div className="bookingHeader">
+                            <Link className="bookingBack" href="/destinations">
+                                ← Back to destinations
+                            </Link>
+
                             <p className="bookingOverline">Booking</p>
                             <h2>
                                 {destination.name}, {destination.country}
@@ -329,9 +363,15 @@ export default function BookingPage({ params }: Props) {
                                         />
                                     </label>
 
-                                    <button className="btn" type="submit">
-                                        Confirm booking request
-                                    </button>
+                                    <div className="bookingFooterActions">
+                                        <button className="btn" type="submit">
+                                            Confirm booking request
+                                        </button>
+
+                                        <Link className="btn ghost" href="/destinations">
+                                            Cancel booking
+                                        </Link>
+                                    </div>
                                 </form>
                             )}
                         </div>
