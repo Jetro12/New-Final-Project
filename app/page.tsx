@@ -231,7 +231,7 @@ export default function HomePage() {
                             </div>
                         </div>
 
-                        <form className="footerForm">
+                        <form className="footerForm" onSubmit={submitContact}>
                             <input
                                 className="footerField"
                                 placeholder="Full name"

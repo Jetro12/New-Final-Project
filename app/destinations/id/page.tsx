@@ -1,16 +1,15 @@
-"use client";
-
 import Link from "next/link";
-import { getDestinationById } from "../data";
+import { getDestinationById } from "@/lib/data/destinations";
 
 type Props = {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 };
 
-export default function DestinationDetailPage({ params }: Props) {
-    const destination = getDestinationById(params.id);
+export default async function DestinationDetailPage({ params }: Props) {
+    const { id } = await params;
+    const destination = await getDestinationById(id);
 
     if (!destination) {
         return (
