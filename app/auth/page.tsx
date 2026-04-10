@@ -66,7 +66,7 @@ export default function AuthPage() {
                         <button
                             type="button"
                             className="authProviderBtnWide"
-                            onClick={() => signIn("google", { callbackUrl: "/destinations" })}
+                            onClick={() => signIn("google", { callbackUrl: "/profile" })}
                         >
               <span className="authIconInline">
                 <GoogleIcon />
@@ -77,7 +77,7 @@ export default function AuthPage() {
                         <button
                             type="button"
                             className="authProviderBtnWide"
-                            onClick={() => signIn("azure-ad", { callbackUrl: "/destinations" })}
+                            onClick={() => signIn("azure-ad", { callbackUrl: "/profile" })}
                         >
               <span className="authIconInline">
                 <MicrosoftIcon />

@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import RequireAuth from "@/components/RequireAuth";
 import { getDestinationById, type Destination } from "@/lib/data/destinations";
+import { createClient } from "@/lib/supabase/client";
 
 type BookingForm = {
     start: string;
@@ -93,10 +94,36 @@ export default function BookingPage() {
         return Object.keys(nextErrors).length === 0;
     }
 
-    function submitBooking(e: React.FormEvent<HTMLFormElement>) {
+    async function submitBooking(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
         if (!validateForm()) return;
-        setSubmitted(true);
+        if (!destination || !user?.email) return;
+
+        try {
+            const supabase = createClient();
+
+            const { error } = await supabase.from("bookings").insert({
+                user_email: user.email,
+                destination_id: destination.id,
+                destination_name: destination.name,
+                country: destination.country,
+                start_date: form.start,
+                end_date: form.end,
+                travellers: form.travellers,
+                status: "Upcoming",
+                total: estimatedTotal,
+            });
+
+            if (error) {
+                throw new Error(error.message);
+            }
+
+            setSubmitted(true);
+        } catch (err) {
+            console.error("Booking save error:", err);
+            alert("Failed to save booking. Please try again.");
+        }
     }
 
     if (destinationLoading || status === "loading") {

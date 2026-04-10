@@ -2149,50 +2149,70 @@ body {
    PROFILE
 ========================= */
 
-.profileWrap{
-  max-width: 900px;
+.profileWrap {
+  max-width: 920px;
   margin: 0 auto;
 }
 
-.profileHeader{
-  display:flex;
-  align-items:center;
+.profileHeader {
+  display: flex;
+  align-items: center;
   gap: 16px;
+  margin-bottom: 6px;
 }
 
-.profileAvatar{
+.profileHeadText {
+  flex: 1;
+  min-width: 0;
+}
+
+.profileEyebrow {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.62);
+}
+
+.profileHeadText h1 {
+  margin: 0 0 6px;
+}
+
+.profileAvatar {
   width: 90px;
   height: 90px;
   border-radius: 999px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.16);
   background: rgba(255,255,255,0.08);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.profileAvatar img{
+.profileAvatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  display:block;
+  display: block;
 }
 
-.profileAvatarFallback{
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.profileAvatarFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 900;
   font-size: 28px;
   color: rgba(255,255,255,0.92);
   background: linear-gradient(135deg, rgba(43,164,240,0.55), rgba(194,16,36,0.40));
 }
 
-.profileCard{
+.profileCard {
   margin-top: 18px;
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
@@ -2200,8 +2220,18 @@ body {
   padding: 16px;
 }
 
-.profileRow{
-  display:flex;
+.profileCardHead {
+  margin-bottom: 6px;
+}
+
+.profileCardHead h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.profileRow {
+  display: flex;
   justify-content: space-between;
   gap: 12px;
   padding: 12px 4px;
@@ -2209,34 +2239,35 @@ body {
   font-weight: 650;
 }
 
-.profileRow:last-child{
+.profileRow:last-child {
   border-bottom: 0;
 }
 
-.profileRow span{
+.profileRow span {
   color: rgba(255,255,255,0.70);
   font-weight: 800;
 }
+
 /* =========================
    PROFILE DASHBOARD EXTRAS
 ========================= */
 
-.profileStats{
+.profileStats {
   margin-top: 14px;
-  display:grid;
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
-.profileStat{
+.profileStat {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
   border-radius: 18px;
   padding: 14px;
 }
 
-.profileStatLabel{
-  display:block;
+.profileStatLabel {
+  display: block;
   color: rgba(255,255,255,0.70);
   font-weight: 800;
   font-size: 12px;
@@ -2244,82 +2275,82 @@ body {
   letter-spacing: 0.08em;
 }
 
-.profileStatValue{
-  display:block;
+.profileStatValue {
+  display: block;
   margin-top: 8px;
   font-size: 24px;
   font-weight: 900;
 }
 
-.profileSection{
+.profileSection {
   margin-top: 18px;
 }
 
-.profileSectionHead{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
+.profileSectionHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 12px;
   margin-bottom: 10px;
 }
 
-.profileSectionHead h2{
+.profileSectionHead h2 {
   margin: 0;
   font-weight: 900;
   font-size: 18px;
 }
 
-.profileLink{
-  text-decoration:none;
+.profileLink {
+  text-decoration: none;
   font-weight: 900;
   color: rgba(255,255,255,0.85);
   opacity: 0.9;
 }
 
-.profileLink:hover{
+.profileLink:hover {
   opacity: 1;
   text-decoration: underline;
 }
 
-.profileList{
+.profileList {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
   border-radius: 18px;
   overflow: hidden;
 }
 
-.profileBooking{
-  display:flex;
-  justify-content:space-between;
+.profileBooking {
+  display: flex;
+  justify-content: space-between;
   gap: 12px;
   padding: 14px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-.profileBooking:last-child{
+.profileBooking:last-child {
   border-bottom: 0;
 }
 
-.profileBookingTitle{
+.profileBookingTitle {
   font-weight: 900;
 }
 
-.profileBookingMeta{
+.profileBookingMeta {
   margin-top: 4px;
   color: rgba(255,255,255,0.70);
   font-weight: 650;
   font-size: 13px;
 }
 
-.profileBookingRight{
-  display:flex;
-  align-items:center;
+.profileBookingRight {
+  display: flex;
+  align-items: center;
   gap: 10px;
   white-space: nowrap;
   font-weight: 900;
 }
 
-.profilePill{
+.profilePill {
   padding: 6px 10px;
   border-radius: 999px;
   font-weight: 900;
@@ -2327,62 +2358,62 @@ body {
   border: 1px solid rgba(255,255,255,0.12);
 }
 
-.pillUpcoming{
+.pillUpcoming {
   background: rgba(43,164,240,0.18);
   border-color: rgba(43,164,240,0.28);
 }
 
-.pillCompleted{
+.pillCompleted {
   background: rgba(78,234,122,0.18);
   border-color: rgba(78,234,122,0.28);
 }
 
-.pillCancelled{
+.pillCancelled {
   background: rgba(194,16,36,0.18);
   border-color: rgba(194,16,36,0.28);
 }
 
-.profileEmpty{
+.profileEmpty {
   padding: 14px 16px;
   color: rgba(255,255,255,0.72);
   font-weight: 650;
 }
 
-.profileGrid2{
+.profileGrid2 {
   margin-top: 18px;
-  display:grid;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-.profilePanel{
+.profilePanel {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.10);
   border-radius: 18px;
   padding: 16px;
 }
 
-.savedGrid{
-  display:grid;
+.savedGrid {
+  display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
 }
 
-.savedCard{
+.savedCard {
   background: rgba(0,0,0,0.18);
   border: 1px solid rgba(255,255,255,0.10);
   border-radius: 14px;
   padding: 12px;
 }
 
-.savedTop{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.savedTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
 
-.savedTag{
+.savedTag {
   padding: 4px 10px;
   border-radius: 999px;
   background: rgba(255,255,255,0.08);
@@ -2391,76 +2422,91 @@ body {
   font-size: 12px;
 }
 
-.savedMeta{
+.savedMeta {
   margin-top: 6px;
   color: rgba(255,255,255,0.70);
   font-weight: 650;
 }
 
-.prefs{
+.prefs {
   margin-top: 10px;
-  display:flex;
+  display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.prefRow{
-  display:flex;
-  justify-content:space-between;
+.prefRow {
+  display: flex;
+  justify-content: space-between;
   gap: 12px;
   padding: 10px 0;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   font-weight: 650;
 }
 
-.prefRow:last-child{
+.prefRow:last-child {
   border-bottom: 0;
 }
 
-.prefRow span{
+.prefRow span {
   color: rgba(255,255,255,0.72);
   font-weight: 800;
 }
 
-.profileMiniActions{
+.profileMiniActions {
   margin-top: 14px;
-  display:flex;
+  display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.profileBtn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+.profileBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 40px;
   padding: 0 16px;
   border-radius: 999px;
-  text-decoration:none;
+  text-decoration: none;
   font-weight: 900;
   background: rgba(43,164,240,0.95);
   color: white;
   border: 1px solid rgba(255,255,255,0.12);
 }
 
-.profileBtn:hover{
+.profileBtn:hover {
   background: rgba(14,132,189,0.98);
 }
 
-.profileBtn.ghost{
+.profileBtn.ghost {
   background: rgba(255,255,255,0.06);
 }
 
-.profileBtn.ghost:hover{
+.profileBtn.ghost:hover {
   background: rgba(255,255,255,0.10);
 }
 
-@media (max-width: 980px){
-  .profileStats{
+@media (max-width: 980px) {
+  .profileStats {
     grid-template-columns: 1fr;
   }
-  .profileGrid2{
+
+  .profileGrid2 {
     grid-template-columns: 1fr;
+  }
+
+  .profileHeader {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .profileBooking {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profileBookingRight {
+    white-space: normal;
   }
 }
 

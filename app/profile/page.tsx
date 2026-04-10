@@ -2,100 +2,97 @@
 
 import RequireAuth from "@/components/RequireAuth";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
-
-type BookingStatus = "Upcoming" | "Completed" | "Cancelled";
-
-type Booking = {
-    id: string;
-    destination: string;
-    country: string;
-    dates: string;
-    travellers: number;
-    status: BookingStatus;
-    total: number;
-};
-
-type SavedPlace = {
-    id: string;
-    name: string;
-    country: string;
-    tag: "Beach" | "City" | "Nature" | "Food";
-};
+import {
+    ensureUserProfile,
+    getProfileBookings,
+    getSavedPlaces,
+    getTravelPreferences,
+    type Booking,
+    type BookingStatus,
+    type SavedPlace,
+    type TravelPreferences,
+} from "@/lib/data/profile";
 
 export default function ProfilePage() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const user = session?.user;
 
-    // Mock data (swap for DB later)
-    const upcomingBookings: Booking[] = [
-        {
-            id: "BK-2041",
-            destination: "Barcelona",
-            country: "Spain",
-            dates: "2026-03-18 → 2026-03-23",
-            travellers: 2,
-            status: "Upcoming",
-            total: 780,
-        },
-        {
-            id: "BK-2097",
-            destination: "Marrakech",
-            country: "Morocco",
-            dates: "2026-05-06 → 2026-05-10",
-            travellers: 1,
-            status: "Upcoming",
-            total: 420,
-        },
-    ];
+    const [upcomingBookings, setUpcomingBookings] = useState<Booking[]>([]);
+    const [pastBookings, setPastBookings] = useState<Booking[]>([]);
+    const [savedPlaces, setSavedPlaces] = useState<SavedPlace[]>([]);
+    const [preferences, setPreferences] = useState<TravelPreferences>({
+        defaultTravellers: 2,
+        favouriteStyle: "City breaks",
+        alertType: "Price drops",
+        budgetRange: "££",
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-    const pastBookings: Booking[] = [
-        {
-            id: "BK-1880",
-            destination: "Paris",
-            country: "France",
-            dates: "2025-12-02 → 2025-12-06",
-            travellers: 2,
-            status: "Completed",
-            total: 690,
-        },
-        {
-            id: "BK-1764",
-            destination: "Amsterdam",
-            country: "Netherlands",
-            dates: "2025-08-11 → 2025-08-14",
-            travellers: 1,
-            status: "Completed",
-            total: 310,
-        },
-    ];
+    useEffect(() => {
+        const loadProfileData = async () => {
+            if (!user?.email) return;
 
-    const savedPlaces: SavedPlace[] = [
-        { id: "SV-1", name: "Tokyo", country: "Japan", tag: "Food" },
-        { id: "SV-2", name: "Santorini", country: "Greece", tag: "Beach" },
-        { id: "SV-3", name: "Reykjavík", country: "Iceland", tag: "Nature" },
-    ];
+            try {
+                await ensureUserProfile({
+                    email: user.email,
+                    name: user.name,
+                    image: user.image,
+                });
+
+                const bookings = await getProfileBookings(user.email);
+                const saved = await getSavedPlaces(user.email);
+                const prefs = await getTravelPreferences(user.email);
+
+                setUpcomingBookings(bookings.upcoming);
+                setPastBookings(bookings.past);
+                setSavedPlaces(saved);
+                setPreferences(prefs);
+            } catch (err) {
+                console.error(err);
+                setError("Failed to load profile data.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (status === "authenticated") {
+            loadProfileData();
+        }
+    }, [status, user?.email, user?.name, user?.image]);
 
     const stats = useMemo(() => {
         const totalTrips = upcomingBookings.length + pastBookings.length;
         const totalSpend = [...upcomingBookings, ...pastBookings].reduce(
-            (sum, b) => sum + b.total,
+            (sum, booking) => sum + booking.total,
             0
         );
-        const countriesVisited = new Set(pastBookings.map((b) => b.country)).size;
+        const countriesVisited = new Set(pastBookings.map((booking) => booking.country)).size;
+
         return { totalTrips, totalSpend, countriesVisited };
     }, [upcomingBookings, pastBookings]);
+
+    if (status === "loading" || loading) {
+        return (
+            <RequireAuth>
+                <div className="page">
+                    <section className="section profileWrap">
+                        <p>Loading profile...</p>
+                    </section>
+                </div>
+            </RequireAuth>
+        );
+    }
 
     return (
         <RequireAuth>
             <div className="page">
                 <section className="section profileWrap">
-                    {/* Header */}
                     <div className="profileHeader">
                         <div className="profileAvatar">
                             {user?.image ? (
-                                // eslint-disable-next-line @next/next/no-img-element
                                 <img
                                     src={user.image}
                                     alt="Profile"
@@ -108,14 +105,14 @@ export default function ProfilePage() {
                             )}
                         </div>
 
-                        <div className="profileHeadText" style={{ flex: 1 }}>
+                        <div className="profileHeadText">
+                            <p className="profileEyebrow">Account</p>
                             <h1>Profile</h1>
                             <p className="muted">
-                                Your Roamer account details and travel overview.
+                                Welcome back{user?.name ? `, ${user.name.split(" ")[0]}` : ""}. Here’s your travel overview.
                             </p>
                         </div>
 
-                        {/* ✅ Sign out button */}
                         <button
                             type="button"
                             className="appSignOutBtn"
@@ -125,34 +122,30 @@ export default function ProfilePage() {
                         </button>
                     </div>
 
-                    {/* Quick stats */}
+                    {error && <div className="profileEmpty">{error}</div>}
+
                     <div className="profileStats">
                         <div className="profileStat">
                             <span className="profileStatLabel">Trips</span>
-                            <strong className="profileStatValue">
-                                {stats.totalTrips}
-                            </strong>
+                            <strong className="profileStatValue">{stats.totalTrips}</strong>
                         </div>
 
                         <div className="profileStat">
-                            <span className="profileStatLabel">
-                                Countries visited
-                            </span>
-                            <strong className="profileStatValue">
-                                {stats.countriesVisited}
-                            </strong>
+                            <span className="profileStatLabel">Countries visited</span>
+                            <strong className="profileStatValue">{stats.countriesVisited}</strong>
                         </div>
 
                         <div className="profileStat">
                             <span className="profileStatLabel">Total spend</span>
-                            <strong className="profileStatValue">
-                                £{stats.totalSpend}
-                            </strong>
+                            <strong className="profileStatValue">£{stats.totalSpend}</strong>
                         </div>
                     </div>
 
-                    {/* Account details */}
                     <div className="profileCard">
+                        <div className="profileCardHead">
+                            <h2>Account details</h2>
+                        </div>
+
                         <div className="profileRow">
                             <span>Name</span>
                             <strong>{user?.name ?? "—"}</strong>
@@ -163,7 +156,6 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {/* Upcoming bookings */}
                     <div className="profileSection">
                         <div className="profileSectionHead">
                             <h2>Upcoming bookings</h2>
@@ -173,40 +165,35 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="profileList">
-                            {upcomingBookings.map((b) => (
-                                <div className="profileBooking" key={b.id}>
-                                    <div>
-                                        <div className="profileBookingTitle">
-                                            {b.destination}, {b.country}
+                            {upcomingBookings.length > 0 ? (
+                                upcomingBookings.map((booking) => (
+                                    <div className="profileBooking" key={booking.id}>
+                                        <div>
+                                            <div className="profileBookingTitle">
+                                                {booking.destination}, {booking.country}
+                                            </div>
+                                            <div className="profileBookingMeta">
+                                                {booking.dates} • {booking.travellers} traveller
+                                                {booking.travellers > 1 ? "s" : ""}
+                                            </div>
                                         </div>
-                                        <div className="profileBookingMeta">
-                                            {b.dates} • {b.travellers} traveller
-                                            {b.travellers > 1 ? "s" : ""}
+
+                                        <div className="profileBookingRight">
+                                            <span className={`profilePill ${pillClass(booking.status)}`}>
+                                                {booking.status}
+                                            </span>
+                                            <strong>£{booking.total}</strong>
                                         </div>
                                     </div>
-
-                                    <div className="profileBookingRight">
-                                        <span
-                                            className={`profilePill ${pillClass(
-                                                b.status
-                                            )}`}
-                                        >
-                                            {b.status}
-                                        </span>
-                                        <strong>£{b.total}</strong>
-                                    </div>
-                                </div>
-                            ))}
-
-                            {upcomingBookings.length === 0 && (
+                                ))
+                            ) : (
                                 <div className="profileEmpty">
-                                    No upcoming bookings yet.
+                                    No upcoming bookings yet. Your next trip will appear here.
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    {/* Past bookings */}
                     <div className="profileSection">
                         <div className="profileSectionHead">
                             <h2>Past bookings</h2>
@@ -216,32 +203,28 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="profileList">
-                            {pastBookings.map((b) => (
-                                <div className="profileBooking" key={b.id}>
-                                    <div>
-                                        <div className="profileBookingTitle">
-                                            {b.destination}, {b.country}
+                            {pastBookings.length > 0 ? (
+                                pastBookings.map((booking) => (
+                                    <div className="profileBooking" key={booking.id}>
+                                        <div>
+                                            <div className="profileBookingTitle">
+                                                {booking.destination}, {booking.country}
+                                            </div>
+                                            <div className="profileBookingMeta">
+                                                {booking.dates} • {booking.travellers} traveller
+                                                {booking.travellers > 1 ? "s" : ""}
+                                            </div>
                                         </div>
-                                        <div className="profileBookingMeta">
-                                            {b.dates} • {b.travellers} traveller
-                                            {b.travellers > 1 ? "s" : ""}
+
+                                        <div className="profileBookingRight">
+                                            <span className={`profilePill ${pillClass(booking.status)}`}>
+                                                {booking.status}
+                                            </span>
+                                            <strong>£{booking.total}</strong>
                                         </div>
                                     </div>
-
-                                    <div className="profileBookingRight">
-                                        <span
-                                            className={`profilePill ${pillClass(
-                                                b.status
-                                            )}`}
-                                        >
-                                            {b.status}
-                                        </span>
-                                        <strong>£{b.total}</strong>
-                                    </div>
-                                </div>
-                            ))}
-
-                            {pastBookings.length === 0 && (
+                                ))
+                            ) : (
                                 <div className="profileEmpty">
                                     No past bookings yet.
                                 </div>
@@ -249,7 +232,6 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {/* Saved + Preferences */}
                     <div className="profileGrid2">
                         <div className="profilePanel">
                             <div className="profileSectionHead">
@@ -259,38 +241,44 @@ export default function ProfilePage() {
                                 </Link>
                             </div>
 
-                            <div className="savedGrid">
-                                {savedPlaces.map((s) => (
-                                    <div key={s.id} className="savedCard">
-                                        <div className="savedTop">
-                                            <strong>{s.name}</strong>
-                                            <span className="savedTag">{s.tag}</span>
+                            {savedPlaces.length > 0 ? (
+                                <div className="savedGrid">
+                                    {savedPlaces.map((place) => (
+                                        <div key={place.id} className="savedCard">
+                                            <div className="savedTop">
+                                                <strong>{place.name}</strong>
+                                                <span className="savedTag">{place.tag}</span>
+                                            </div>
+                                            <div className="savedMeta">{place.country}</div>
                                         </div>
-                                        <div className="savedMeta">{s.country}</div>
-                                    </div>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="profileEmpty">No saved places yet.</div>
+                            )}
                         </div>
 
                         <div className="profilePanel">
-                            <h2 style={{ marginTop: 0 }}>Travel preferences</h2>
+                            <div className="profileCardHead">
+                                <h2>Travel preferences</h2>
+                            </div>
 
                             <div className="prefs">
                                 <div className="prefRow">
                                     <span>Default travellers</span>
-                                    <strong>2</strong>
+                                    <strong>{preferences.defaultTravellers}</strong>
                                 </div>
                                 <div className="prefRow">
                                     <span>Favourite style</span>
-                                    <strong>City breaks</strong>
+                                    <strong>{preferences.favouriteStyle}</strong>
                                 </div>
                                 <div className="prefRow">
                                     <span>Alert type</span>
-                                    <strong>Price drops</strong>
+                                    <strong>{preferences.alertType}</strong>
                                 </div>
                                 <div className="prefRow">
                                     <span>Budget range</span>
-                                    <strong>££</strong>
+                                    <strong>{preferences.budgetRange}</strong>
                                 </div>
                             </div>
 
