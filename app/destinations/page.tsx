@@ -18,6 +18,7 @@ function DestinationsContent() {
     const [destinations, setDestinations] = useState<Destination[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [selectedRegion, setSelectedRegion] = useState("all");
 
     useEffect(() => {
         const loadDestinations = async () => {
@@ -35,6 +36,11 @@ function DestinationsContent() {
         loadDestinations();
     }, []);
 
+    const regions = useMemo(() => {
+        const unique = Array.from(new Set(destinations.map((d) => d.region))).sort();
+        return ["all", ...unique];
+    }, [destinations]);
+
     const filtered = useMemo(() => {
         return destinations
             .filter((d) => {
@@ -47,34 +53,34 @@ function DestinationsContent() {
 
                 const matchType = !type || d.tags.includes(type);
 
-                return matchText && matchType;
+                const matchRegion =
+                    selectedRegion === "all" ||
+                    d.region.toLowerCase() === selectedRegion.toLowerCase();
+
+                return matchText && matchType && matchRegion;
             })
             .sort((a, b) => a.name.localeCompare(b.name));
-    }, [destinations, query, type]);
+    }, [destinations, query, type, selectedRegion]);
 
     return (
         <div className="destPage">
             <div className="destWrap">
                 <div className="destHeader">
                     <div>
-                        <h1>Destinations</h1>
+                        <h1>Explore Top Destinations</h1>
                         <div className="destSub">
-                            {query || type ? (
-                                <>
-                                    {query && <>Showing results for <strong>{query}</strong></>}
-                                    {type && <> • {type}</>}
-                                    {start && end && <> • {start} → {end}</>}
-                                    {adults && <> • {adults} adults</>}
-                                </>
-                            ) : (
-                                "Browse destinations and start planning."
-                            )}
+                            Find curated destinations, compare highlights, and start planning.
                         </div>
                     </div>
 
-                    <Link className="destCta" href="/">
-                        ← Back home
-                    </Link>
+                    <div className="destHeaderActions">
+                        <Link className="destCta" href="/">
+                            ← Home
+                        </Link>
+                        <Link className="destCta" href="/profile">
+                            Profile
+                        </Link>
+                    </div>
                 </div>
 
                 <div className="destSearch">
@@ -88,67 +94,68 @@ function DestinationsContent() {
                     />
                 </div>
 
+                {!loading && !error && (
+                    <div className="destResultsBar">
+                        <span>
+                            {filtered.length} destination{filtered.length !== 1 ? "s" : ""} found
+                        </span>
+
+                        <div className="regionFilters">
+                            {regions.map((region) => (
+                                <button
+                                    key={region}
+                                    type="button"
+                                    className={`regionBtn ${selectedRegion === region ? "active" : ""}`}
+                                    onClick={() => setSelectedRegion(region)}
+                                >
+                                    {region === "all" ? "All" : region}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {loading && <div className="destEmpty">Loading destinations...</div>}
                 {error && <div className="destEmpty">{error}</div>}
 
                 {!loading && !error && (
                     <>
-                        <div className="destGrid">
+                        <div className="destGalleryGrid">
                             {filtered.map((d) => (
-                                <div className="destCard" key={d.id}>
-                                    <div className="destCardImage">
+                                <article className="galleryCard" key={d.id}>
+                                    <Link className="galleryImageWrap" href={`/destinations/${d.id}`}>
                                         <img src={d.image} alt={`${d.name} view`} loading="lazy" />
-                                        <div className="destRating">★ {d.rating.toFixed(1)}</div>
-                                    </div>
+                                        <div className="galleryRating">★ {d.rating.toFixed(1)}</div>
+                                    </Link>
 
-                                    <div className="destCardBody">
-                                        <div className="destCardTop">
-                                            <div>
-                                                <div className="destName">{d.name}</div>
-                                                <div className="destCountry">
-                                                    {d.country} • {d.region}
-                                                </div>
-                                            </div>
-                                            <div className="destPrice">From £{d.fromPrice}</div>
+                                    <div className="galleryBody">
+                                        <h2 className="galleryTitle">{d.name}</h2>
+                                        <p className="galleryDesc">
+                                            {d.description.length > 72
+                                                ? `${d.description.slice(0, 72)}...`
+                                                : d.description}
+                                        </p>
+
+                                        <div className="galleryMeta">
+                                            <span className="galleryRegion">{d.country}</span>
+                                            <span className="galleryDot">•</span>
+                                            <span className="galleryBestTime">{d.bestTime}</span>
                                         </div>
 
-                                        <p className="destDesc">{d.description}</p>
+                                        <div className="galleryBottom">
+                                            <div className="galleryPrice">£{d.fromPrice}</div>
 
-                                        <div className="destTags">
-                                            {d.tags.map((t) => (
-                                                <span className="tag" key={t}>
-                                                    {t}
-                                                </span>
-                                            ))}
-                                        </div>
-
-                                        <div className="destMiniMeta">
-                                            <div>
-                                                <span className="destLabel">Best for</span>
-                                                <strong>{d.bestFor}</strong>
+                                            <div className="galleryActions">
+                                                <Link className="galleryGhostBtn" href={`/destinations/${d.id}`}>
+                                                    Details
+                                                </Link>
+                                                <Link className="galleryPrimaryBtn" href={`/booking/${d.id}`}>
+                                                    Book
+                                                </Link>
                                             </div>
-                                            <div>
-                                                <span className="destLabel">Best time</span>
-                                                <strong>{d.bestTime}</strong>
-                                            </div>
-                                        </div>
-
-                                        <ul className="destMiniHighlights">
-                                            {d.highlights.slice(0, 3).map((h) => (
-                                                <li key={h}>{h}</li>
-                                            ))}
-                                        </ul>
-
-                                        <div className="destActions">
-                                            <Link className="destGhost" href={`/destinations/${d.id}`}>
-                                                Details →
-                                            </Link>
-                                            <Link className="destBtn" href={`/booking/${d.id}`}>
-                                                Book →
-                                            </Link>
                                         </div>
                                     </div>
-                                </div>
+                                </article>
                             ))}
                         </div>
 

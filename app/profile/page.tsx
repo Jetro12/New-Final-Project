@@ -90,6 +90,14 @@ export default function ProfilePage() {
         <RequireAuth>
             <div className="page">
                 <section className="section profileWrap">
+                    <div className="profileTopNav">
+                        <Link className="profileBackLink" href="/">
+                            ← Home
+                        </Link>
+                        <Link className="profileBackLink" href="/destinations">
+                            Explore destinations
+                        </Link>
+                    </div>
                     <div className="profileHeader">
                         <div className="profileAvatar">
                             {user?.image ? (

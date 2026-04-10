@@ -13,65 +13,101 @@ export default async function DestinationDetailPage({ params }: Props) {
 
     if (!destination) {
         return (
-            <div className="page">
-                <section className="section">
-                    <h2>Destination not found</h2>
-                    <p className="muted">Try browsing the full catalogue of destinations.</p>
-                    <Link className="btn" href="/destinations">
-                        Back to destinations
+            <div className="destDetailPage">
+                <div className="destDetailWrap">
+                    <Link className="destBack" href="/destinations">
+                        ← Back to destinations
                     </Link>
-                </section>
+
+                    <div className="destInfoCard">
+                        <h1>Destination not found</h1>
+                        <p>We couldn’t find that destination. Please go back and try another one.</p>
+                        <Link className="destPrimaryBtn" href="/destinations">
+                            Browse destinations
+                        </Link>
+                    </div>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="page">
-            <section className="section destDetail">
-                <div className="destDetailHero">
-                    <img src={destination.image} alt={`${destination.name} skyline`} />
-                    <div className="destDetailHeroContent">
-                        <p className="destDetailOverline">{destination.region}</p>
-                        <h2>
+        <div className="destDetailPage">
+            <div className="destDetailWrap">
+                <Link className="destBack" href="/destinations">
+                    ← Back to destinations
+                </Link>
+
+                <div className="destHeroCard">
+                    <div className="destHeroImage">
+                        <img src={destination.image} alt={`${destination.name} view`} />
+                    </div>
+
+                    <div className="destHeroContent">
+                        <p className="destEyebrow">{destination.region}</p>
+                        <h1>
                             {destination.name}, {destination.country}
-                        </h2>
-                        <p className="muted">{destination.description}</p>
-                        <div className="destDetailHighlights">
-                            {destination.highlights.map((highlight) => (
-                                <span key={highlight}>{highlight}</span>
+                        </h1>
+                        <p className="destHeroText">{destination.description}</p>
+
+                        <div className="destTagRow">
+                            {destination.tags.map((tag) => (
+                                <span className="destPill" key={tag}>
+                                    {tag}
+                                </span>
                             ))}
+                        </div>
+
+                        <div className="destInfoGrid">
+                            <div className="destInfoBox">
+                                <span className="destLabel">Best for</span>
+                                <strong>{destination.bestFor}</strong>
+                            </div>
+                            <div className="destInfoBox">
+                                <span className="destLabel">Best time</span>
+                                <strong>{destination.bestTime}</strong>
+                            </div>
+                            <div className="destInfoBox">
+                                <span className="destLabel">Rating</span>
+                                <strong>★ {destination.rating.toFixed(1)}</strong>
+                            </div>
+                            <div className="destInfoBox">
+                                <span className="destLabel">From</span>
+                                <strong>£{destination.fromPrice}</strong>
+                            </div>
+                        </div>
+
+                        <div className="destDetailActions">
+                            <Link className="destPrimaryBtn" href={`/booking/${destination.id}`}>
+                                Book now
+                            </Link>
+                            <Link className="destSecondaryBtn" href="/destinations">
+                                Explore more
+                            </Link>
                         </div>
                     </div>
                 </div>
 
-                <div className="destDetailBody">
-                    <div>
-                        <h3>Why travellers love it</h3>
-                        <p>
-                            Best for {destination.bestFor.toLowerCase()}, with ideal travel windows
-                            in {destination.bestTime}. Expect curated stays, flexible itineraries,
-                            and support from our travel team.
-                        </p>
-                        <ul>
-                            <li>Average rating: {destination.rating.toFixed(1)} / 5</li>
-                            <li>Popular inclusions: {destination.tags.join(", ")}</li>
-                            <li>Guided add-ons curated by local experts</li>
+                <div className="destDetailGrid">
+                    <div className="destInfoCard">
+                        <h2>Top highlights</h2>
+                        <ul className="destHighlightsList">
+                            {destination.highlights.map((highlight) => (
+                                <li key={highlight}>{highlight}</li>
+                            ))}
                         </ul>
                     </div>
 
-                    <div className="destDetailCard">
-                        <div>
-                            <div className="destDetailPrice">From £{destination.fromPrice}</div>
-                            <div className="destDetailMeta">
-                                Flexible dates • Secure deposits • 24/7 support
-                            </div>
-                        </div>
-                        <Link className="btn" href={`/booking/${destination.id}`}>
-                            Start booking
-                        </Link>
+                    <div className="destInfoCard">
+                        <h2>Why choose {destination.name}?</h2>
+                        <p>
+                            {destination.name} is especially popular for {destination.bestFor.toLowerCase()}.
+                            Travellers usually get the best experience during {destination.bestTime}, with
+                            flexible options for hotels, flights, and curated travel plans.
+                        </p>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     );
 }
