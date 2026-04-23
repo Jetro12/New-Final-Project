@@ -21,6 +21,7 @@ const handler = NextAuth({
                 params: {
                     prompt: "select_account",
                 },
+            },
         }),
     ],
     session: { strategy: "jwt" },
