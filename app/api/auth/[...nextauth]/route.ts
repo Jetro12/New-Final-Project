@@ -17,6 +17,10 @@ const handler = NextAuth({
             clientId: process.env.MICROSOFT_CLIENT_ID!,
             clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
             tenantId: "common",
+            authorization: {
+                params: {
+                    prompt: "select_account",
+                },
         }),
     ],
     session: { strategy: "jwt" },
