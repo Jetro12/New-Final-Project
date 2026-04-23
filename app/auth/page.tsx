@@ -1,8 +1,7 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import Link from "next/link";
+import { Suspense } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
@@ -40,7 +39,7 @@ function MicrosoftIcon() {
     );
 }
 
-export default function AuthPage() {
+function AuthContent() {
     const { data: session, status } = useSession();
     const user = session?.user;
     const searchParams = useSearchParams();
@@ -157,5 +156,13 @@ export default function AuthPage() {
                 </aside>
             </div>
         </div>
+    );
+}
+
+export default function AuthPage() {
+    return (
+        <Suspense fallback={<div className="authSplitPage">Loading...</div>}>
+            <AuthContent />
+        </Suspense>
     );
 }
