@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 function GoogleIcon() {
     return (
@@ -40,11 +41,13 @@ function MicrosoftIcon() {
 export default function AuthPage() {
     const { data: session, status } = useSession();
     const user = session?.user;
+    const searchParams = useSearchParams();
+
+    const callbackUrl = searchParams.get("callbackUrl") || "/profile";
 
     return (
         <div className="authSplitPage">
             <div className="authSplitShell">
-                {/* LEFT */}
                 <div className="authLeft">
                     <div className="authBrandRow">
                         <Link className="authBrand" href="/">
@@ -60,28 +63,26 @@ export default function AuthPage() {
                         Sign in with Google or Microsoft to save trips and manage bookings.
                     </p>
 
-
-
                     <div className="authProvidersStack">
                         <button
                             type="button"
                             className="authProviderBtnWide"
-                            onClick={() => signIn("google", { callbackUrl: "/profile" })}
+                            onClick={() => signIn("google", { callbackUrl })}
                         >
-              <span className="authIconInline">
-                <GoogleIcon />
-              </span>
+                            <span className="authIconInline">
+                                <GoogleIcon />
+                            </span>
                             Continue with Google
                         </button>
 
                         <button
                             type="button"
                             className="authProviderBtnWide"
-                            onClick={() => signIn("azure-ad", { callbackUrl: "/profile" })}
+                            onClick={() => signIn("azure-ad", { callbackUrl })}
                         >
-              <span className="authIconInline">
-                <MicrosoftIcon />
-              </span>
+                            <span className="authIconInline">
+                                <MicrosoftIcon />
+                            </span>
                             Continue with Microsoft
                         </button>
                     </div>
@@ -94,13 +95,10 @@ export default function AuthPage() {
                                 <li>Manage bookings in one place</li>
                                 <li>Price drop alerts</li>
                             </ul>
-
                         </div>
                         <div>
                             <h4>Security</h4>
-                            <p>
-                                No passwords. Secure sign-in via Google or Microsoft.
-                            </p>
+                            <p>No passwords. Secure sign-in via Google or Microsoft.</p>
                         </div>
                     </div>
 
@@ -131,11 +129,12 @@ export default function AuthPage() {
                             </div>
                         </div>
                     ) : (
-                        <div className="authHintBox">Already have a booking in mind? Sign in above to continue.</div>
+                        <div className="authHintBox">
+                            Already have a booking in mind? Sign in above to continue.
+                        </div>
                     )}
                 </div>
 
-                {/* RIGHT */}
                 <aside className="authRight">
                     <div className="authRightInner">
                         <h2>New here?</h2>

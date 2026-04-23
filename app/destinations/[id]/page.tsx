@@ -1,15 +1,44 @@
+"use client";
+
 import Link from "next/link";
-import { getDestinationById } from "@/lib/data/destinations";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { getDestinationById, type Destination } from "@/lib/data/destinations";
 
-type Props = {
-    params: Promise<{
-        id: string;
-    }>;
-};
+export default function DestinationDetailPage() {
+    const params = useParams();
+    const id = typeof params.id === "string" ? params.id : "";
 
-export default async function DestinationDetailPage({ params }: Props) {
-    const { id } = await params;
-    const destination = await getDestinationById(id);
+    const [destination, setDestination] = useState<Destination | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadDestination = async () => {
+            if (!id) {
+                setDestination(null);
+                setLoading(false);
+                return;
+            }
+
+            const data = await getDestinationById(id);
+            setDestination(data);
+            setLoading(false);
+        };
+
+        loadDestination();
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className="destDetailPage">
+                <div className="destDetailWrap">
+                    <div className="destInfoCard">
+                        <h1>Loading destination...</h1>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (!destination) {
         return (

@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useParams, useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import RequireAuth from "@/components/RequireAuth";
 import { getDestinationById, type Destination } from "@/lib/data/destinations";
 import { createClient } from "@/lib/supabase/client";
@@ -24,6 +24,7 @@ type FormErrors = Partial<Record<keyof BookingForm, string>>;
 
 export default function BookingPage() {
     const params = useParams();
+    const router = useRouter();
     const id = typeof params.id === "string" ? params.id : "";
 
     const { data: session, status } = useSession();
@@ -62,6 +63,12 @@ export default function BookingPage() {
 
         loadDestination();
     }, [id]);
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.replace(`/auth?callbackUrl=/booking/${id}`);
+        }
+    }, [status, router, id]);
 
     const estimatedTotal = useMemo(() => {
         if (!destination) return 0;
@@ -130,6 +137,10 @@ export default function BookingPage() {
         return <div className="page">Loading…</div>;
     }
 
+    if (status === "unauthenticated") {
+        return <div className="page">Redirecting to sign in…</div>;
+    }
+
     if (!destination) {
         return (
             <div className="page">
@@ -139,95 +150,6 @@ export default function BookingPage() {
                     <Link className="btn" href="/destinations">
                         Browse destinations
                     </Link>
-                </section>
-            </div>
-        );
-    }
-
-    if (status !== "authenticated") {
-        return (
-            <div className="page">
-                <section className="section bookingLayout">
-                    <div className="bookingMain">
-                        <div className="bookingHeader">
-                            <Link className="bookingBack" href="/destinations">
-                                ← Back to destinations
-                            </Link>
-
-                            <p className="bookingOverline">Booking</p>
-                            <h2>
-                                {destination.name}, {destination.country}
-                            </h2>
-                            <p className="muted">{destination.description}</p>
-                        </div>
-
-                        <div className="bookingAuth">
-                            <h3>Sign in to continue</h3>
-                            <p className="muted">
-                                Booking is available after secure sign-in. Choose Google or Microsoft to continue.
-                            </p>
-
-                            <div className="authButtons">
-                                <button
-                                    className="btn"
-                                    type="button"
-                                    onClick={() => signIn("google", { callbackUrl: `/booking/${destination.id}` })}
-                                >
-                                    Continue with Google
-                                </button>
-
-                                <button
-                                    className="btn ghost"
-                                    type="button"
-                                    onClick={() => signIn("azure-ad", { callbackUrl: `/booking/${destination.id}` })}
-                                >
-                                    Continue with Microsoft
-                                </button>
-                            </div>
-
-                            <p className="authNote">
-                                We only support Google or Microsoft sign-in for account security.
-                            </p>
-
-                            <div className="bookingFooterActions">
-                                <Link className="btn ghost" href="/destinations">
-                                    Cancel booking
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-
-                    <aside className="bookingAside">
-                        <div className="bookingSummary">
-                            <img src={destination.image} alt={`${destination.name} view`} />
-                            <div>
-                                <h3>Trip summary</h3>
-                                <p>{destination.bestFor}</p>
-                                <div className="summaryRow">
-                                    <span>Base price</span>
-                                    <strong>£{destination.fromPrice}</strong>
-                                </div>
-                                <div className="summaryRow">
-                                    <span>Travellers</span>
-                                    <strong>{form.travellers}</strong>
-                                </div>
-                                <div className="summaryRow total">
-                                    <span>Estimated total</span>
-                                    <strong>£{estimatedTotal}</strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bookingHighlights">
-                            <h4>What’s included</h4>
-                            <ul>
-                                <li>Flexible hotel options and verified reviews</li>
-                                <li>24/7 travel support once booked</li>
-                                <li>Optional add-ons for tours and transfers</li>
-                                <li>Secure payments with deposits available</li>
-                            </ul>
-                        </div>
-                    </aside>
                 </section>
             </div>
         );
@@ -256,7 +178,7 @@ export default function BookingPage() {
                                 <button
                                     className="linkBtn"
                                     type="button"
-                                    onClick={() => signOut({ callbackUrl: `/booking/${destination.id}` })}
+                                    onClick={() => signOut({ callbackUrl: `/auth?callbackUrl=/booking/${destination.id}` })}
                                 >
                                     Sign out
                                 </button>
